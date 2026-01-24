@@ -1,9 +1,43 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FarmoApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Farmo" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Main Brand Colors -->
+        <item name="colorPrimary">@color/topical_forest</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/light_topical_forest</item>
+        <item name="colorOnPrimaryContainer">@color/topical_forest</item>
+        
+        <!-- Secondary/Background Colors -->
+        <item name="android:windowBackground">@color/light_topical_forest</item>
+        <item name="android:statusBarColor">@color/topical_forest</item>
+        
+        <!-- Surface Colors (Cards, Sheets) -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
     </style>
 
-    <style name="Theme.FarmoApp" parent="Base.Theme.FarmoApp" />
+    <!-- This matches the theme name in AndroidManifest.xml -->
+    <style name="Theme.Farmo" parent="Base.Theme.Farmo" />
+
+    <style name="App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_icon_color_selector</item>
+        <item name="itemTextColor">@color/bottom_nav_icon_color_selector</item>
+        <item name="itemActiveIndicatorStyle">@style/App.BottomNavigationView.ActiveIndicator</item>
+    </style>
+
+    <style name="App.BottomNavigationView.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="OtpEditTextStyle">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">@drawable/otp_box_bg</item>
+        <item name="android:gravity">center</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

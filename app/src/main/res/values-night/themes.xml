@@ -1,7 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FarmoApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.Farmo" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Force light colors even in night mode to maintain brand consistency on all devices -->
+        <item name="colorPrimary">@color/topical_forest</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/light_topical_forest</item>
+        <item name="colorOnPrimaryContainer">@color/topical_forest</item>
+        
+        <item name="android:windowBackground">@color/light_topical_forest</item>
+        <item name="android:statusBarColor">@color/topical_forest</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
     </style>
 </resources>
