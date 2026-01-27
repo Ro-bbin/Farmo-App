@@ -1,8 +1,8 @@
-package com.farmo.network;
+package com.farmo.network.Farmer;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DashboardService {
+public class FarmerDashboardService {
     public static class DashboardRequest{
 
     }
@@ -15,7 +15,7 @@ public class DashboardService {
         private String wallet_amt;
 
         @SerializedName("today_income")
-        private String income;
+        private String today_income;
 
         @SerializedName("my_rating")
         private String rating;
@@ -27,10 +27,9 @@ public class DashboardService {
         // --- Getters ---
         public String getUsername() { return username; }
         public String getWallet_amt() { return wallet_amt; }
-        public String getIncome() { return income; }
+        public String getTodayIncome() { return today_income; }
         public String getRating() { return rating; }
         public String getError() { return error; }
-
 
     }
 }

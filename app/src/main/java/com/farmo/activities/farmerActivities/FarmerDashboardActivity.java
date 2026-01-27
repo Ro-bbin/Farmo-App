@@ -1,5 +1,6 @@
 package com.farmo.activities.farmerActivities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -12,7 +13,7 @@ import com.farmo.activities.OrdersActivity;
 import com.farmo.activities.ProfileActivity;
 import com.farmo.R;
 import com.farmo.activities.ReviewsActivity;
-import com.farmo.network.DashboardResponse;
+import com.farmo.network.Farmer.FarmerDashboardService;
 import com.farmo.network.RetrofitClient;
 import com.farmo.utils.SessionManager;
 
@@ -25,9 +26,10 @@ import retrofit2.Response;
 public class FarmerDashboardActivity extends AppCompatActivity {
 
     private boolean isBalanceVisible = true;
-    private String userType = "Consumer";
+    private String userType = "Farmer";
     private String walletBalance = "0.00";
-    private String fullName = "User";
+    private String fullName = "UserName";
+    private String todaySales = "0.00";
 
     private SessionManager sessionManager;
 
@@ -47,7 +49,6 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         userType = sessionManager.getUserType();
 
         fetchDashboardData();
-
         setupUI();
     }
 
@@ -55,14 +56,17 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         ImageView ivVisibility = findViewById(R.id.ivVisibility);
         TextView tvWalletBalance = findViewById(R.id.tvWalletBalance);
         TextView btnProfile = findViewById(R.id.btnProfile);
+        TextView tvSalesAmount = findViewById(R.id.tvSalesAmount);
 
         // Visibility Toggle
         ivVisibility.setOnClickListener(v -> {
             if (isBalanceVisible) {
                 tvWalletBalance.setText("*****");
+                tvSalesAmount.setText("*****");
                 ivVisibility.setImageResource(R.drawable.ic_visibility_off);
             } else {
-                tvWalletBalance.setText(get_walletBalance());
+                tvWalletBalance.setText(String.format("NRs. %s", get_walletBalance()));
+                tvSalesAmount.setText(String.format("NRs. %s", todaySales));
                 ivVisibility.setImageResource(R.drawable.ic_visibility);
             }
             isBalanceVisible = !isBalanceVisible;
@@ -90,8 +94,6 @@ public class FarmerDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-
         // Stats Row
         findViewById(R.id.cardOrderAnalytics).setOnClickListener(v -> {
             Intent intent = new Intent(FarmerDashboardActivity.this, OrdersActivity.class);
@@ -103,8 +105,6 @@ public class FarmerDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-
         findViewById(R.id.cardReviewsBottom).setOnClickListener(v -> {
             Intent intent = new Intent(FarmerDashboardActivity.this, ReviewsActivity.class);
             startActivity(intent);
@@ -115,53 +115,58 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         String userId = sessionManager.getUserId();
         if (userId == null || userId.isEmpty()) return;
 
-        RetrofitClient.getApiService(this).getDashboard(userId).enqueue(new Callback<DashboardResponse>() {
+        RetrofitClient.getApiService(this).getDashboard(userId).enqueue(new Callback<FarmerDashboardService.DashboardResponse>() {
             @Override
-            public void onResponse(Call<DashboardResponse> call, Response<DashboardResponse> response) {
+            public void onResponse(Call<FarmerDashboardService.DashboardResponse> call,
+                                   Response<FarmerDashboardService.DashboardResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    DashboardResponse data = response.body();
-                    fullName = data.getName();
-                    set_walletBalance(data.getWalletAmt());
+                    FarmerDashboardService.DashboardResponse data = response.body();
 
+                    // Save values safely
+                    fullName = data.getUsername() != null ? data.getUsername() : "User";
+                    set_walletBalance(data.getWallet_amt() != null ? data.getWallet_amt() : "0.00");
+                    todaySales = data.getTodayIncome() != null ? data.getTodayIncome() : "0.00";
+
+                    // Update greeting and wallet UI
                     updateGreeting();
                     refreshWalletUI(data);
                 }
             }
 
             @Override
-            public void onFailure(Call<DashboardResponse> call, Throwable t) {
-                Toast.makeText(FarmerDashboardActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<FarmerDashboardService.DashboardResponse> call, Throwable t) {
+                Toast.makeText(FarmerDashboardActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    @SuppressLint("SetTextI18n")
     public void updateGreeting() {
-        TextView tvGreeting = findViewById(R.id.tvGreeting);
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+        int timeOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String greeting;
 
-        if (timeOfDay >= 0 && timeOfDay < 12) {
+        if (timeOfDay < 12) {
             greeting = getString(R.string.good_morning);
-        } else if (timeOfDay >= 12 && timeOfDay < 16) {
+        } else if (timeOfDay < 16) {
             greeting = getString(R.string.good_afternoon);
-        } else if (timeOfDay >= 16 && timeOfDay < 21) {
+        } else if (timeOfDay < 21) {
             greeting = getString(R.string.good_evening);
         } else {
             greeting = getString(R.string.good_night);
         }
 
-        tvGreeting.setText(greeting + ", " + fullName);
+        TextView tvGreeting = findViewById(R.id.tvGreeting);
+        tvGreeting.setText(String.format("%s, %s", greeting, fullName));
     }
 
-    private void refreshWalletUI(DashboardResponse data) {
+    private void refreshWalletUI(FarmerDashboardService.DashboardResponse data) {
         TextView tvTodaysLabel = findViewById(R.id.tvTodaysSalesLabel);
         TextView tvWalletBalance = findViewById(R.id.tvWalletBalance);
         TextView tvSalesAmount = findViewById(R.id.tvSalesAmount);
-        
+
         String label = "Farmer".equals(userType) ? getString(R.string.todays_sales) : getString(R.string.todays_expenses);
         tvTodaysLabel.setText(label);
-        tvWalletBalance.setText(data.getWalletAmt());
-        tvSalesAmount.setText(data.getIncome());
+        tvWalletBalance.setText(String.format("NRs. %s", get_walletBalance()));
+        tvSalesAmount.setText(String.format("NRs. %s", todaySales));
     }
 }

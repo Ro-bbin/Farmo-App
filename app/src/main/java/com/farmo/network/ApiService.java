@@ -1,5 +1,6 @@
 package com.farmo.network;
 
+import com.farmo.network.Farmer.FarmerDashboardService;
 import com.farmo.network.auth.ForgotPasswordChangePasswordRequest;
 import com.farmo.network.auth.ForgotPasswordRequest;
 import com.farmo.network.auth.ForgotPasswordResponse;
@@ -12,7 +13,6 @@ import com.farmo.network.auth.VerifyOtpRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -49,5 +49,5 @@ public interface ApiService {
     Call<UserProfileResponse> getUserProfile(@Query("user_id") String userId);
 
     @POST("api/home/dashboard/")
-    Call<DashboardResponse> getDashboard(@Query("user_id") String userId);
+    Call<FarmerDashboardService.DashboardResponse> getDashboard(@Query("user_id") String userId);
 }

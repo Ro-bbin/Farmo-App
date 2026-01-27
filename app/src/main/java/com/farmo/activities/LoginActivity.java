@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.farmo.activities.consumerActivities.ConsumerDashboardActivity;
 import com.farmo.activities.farmerActivities.FarmerDashboardActivity;
 import com.farmo.R;
 import com.farmo.network.ApiService;
@@ -187,10 +188,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToDashboard(String userId, String userType) {
-        Intent intent = new Intent(LoginActivity.this, FarmerDashboardActivity.class);
-        intent.putExtra("USER_ID", userId);
-        intent.putExtra("USER_TYPE", userType);
-        startActivity(intent);
-        finish();
+        if(userType.equalsIgnoreCase("farmer") || userType.equalsIgnoreCase("verifiedfarmer")){
+            Intent intent = new Intent(LoginActivity.this, FarmerDashboardActivity.class);
+            intent.putExtra("USER_ID", userId);
+            intent.putExtra("USER_TYPE", userType);
+            startActivity(intent);
+            finish();
+        }
+        else if (userType.equalsIgnoreCase("consumer") || userType.equalsIgnoreCase("verifiedconsumer")) {
+            Intent intent = new Intent(LoginActivity.this, ConsumerDashboardActivity.class);
+            intent.putExtra("USER_ID", userId);
+            intent.putExtra("USER_TYPE", userType);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            Toast.makeText(LoginActivity.this, "Invalid user type", Toast.LENGTH_SHORT).show();
+        }
     }
 }
