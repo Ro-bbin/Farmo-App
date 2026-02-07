@@ -1,4 +1,4 @@
-package com.farmo.network;
+package com.farmo.network.Dashboard;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +9,7 @@ public class DashboardService {
 
     public static class DashboardResponse{
         @SerializedName("username")
-        private String username;
+        private String Username;
 
         @SerializedName("wallet_ammount")
         private String wallet_amt;
@@ -25,7 +25,7 @@ public class DashboardService {
 
 
         // --- Getters ---
-        public String getUsername() { return username; }
+        public String getUsername() { return Username; }
         public String getWallet_amt() { return wallet_amt; }
         public String getTodayIncome() { return today_income; }
         public String getRating() { return rating; }
