@@ -74,4 +74,5 @@
     <string name="identify_user">Identify User</string>
     <string name="cant_remember_details">Can\'t remember your details? %1$s</string>
     <string name="contact_farmo_support">Contact Farmo Support</string>
+    <string name="greeting">Greeting</string>
 </resources>

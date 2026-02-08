@@ -33,7 +33,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/good_morning"
+                        android:text=""
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -103,6 +103,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:id="@+id/Walletbox"
                     android:layout_height="wrap_content"
                     android:padding="16dp">
 
@@ -119,12 +120,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvWalletLabel"
-                        android:text=""
+                        android:text="*****"
                         android:textColor="@android:color/black"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <Imag1eView
                         android:id="@+id/ivVisibility"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -156,7 +157,7 @@
                         android:layout_below="@id/divider"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
-                        android:text=""
+                        android:text="***"
                         android:textColor="@android:color/black"
                         android:textStyle="bold" />
 

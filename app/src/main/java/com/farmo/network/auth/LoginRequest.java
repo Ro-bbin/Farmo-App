@@ -10,7 +10,7 @@ public class LoginRequest {
     private String password;
     
     @SerializedName("is_admin")
-    private boolean isAdmin;
+    private boolean isAdmin = false;
     
     @SerializedName("device_info")
     private String deviceInfo;
@@ -18,7 +18,7 @@ public class LoginRequest {
     public LoginRequest(String identifier, String password, boolean isAdmin , String deviceInfo) {
         this.identifier = identifier;
         this.password = password;
-        this.isAdmin = false;
+        this.isAdmin = isAdmin;
         this.deviceInfo = deviceInfo;
     }
 }

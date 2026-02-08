@@ -3,7 +3,10 @@ package com.farmo.activities.farmerActivities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,9 +16,12 @@ import com.farmo.activities.OrdersActivity;
 import com.farmo.activities.ProfileActivity;
 import com.farmo.R;
 import com.farmo.activities.ReviewsActivity;
-import com.farmo.network.DashboardService;
+import com.farmo.activities.wallet.WalletActivity;
+import com.farmo.network.Dashboard.DashboardService;
+import com.farmo.network.Dashboard.RefreshWallet;
 import com.farmo.network.RetrofitClient;
 import com.farmo.utils.SessionManager;
+import com.google.gson.Gson;
 
 import java.util.Calendar;
 
@@ -40,6 +46,12 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         return walletBalance;
     }
 
+    private RelativeLayout walletArea ;
+
+    private TextView tvSalesAmount, tvWalletBalance;
+
+    private ImageView RefreshWalletbyImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,16 +59,22 @@ public class FarmerDashboardActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
         userType = sessionManager.getUserType();
+        setupUI();
+
 
         fetchDashboardData();
-        setupUI();
+
+
     }
 
     private void setupUI() {
         ImageView ivVisibility = findViewById(R.id.ivVisibility);
-        TextView tvWalletBalance = findViewById(R.id.tvWalletBalance);
+        tvWalletBalance = findViewById(R.id.tvWalletBalance);
         TextView btnProfile = findViewById(R.id.btnProfile);
-        TextView tvSalesAmount = findViewById(R.id.tvSalesAmount);
+        tvSalesAmount = findViewById(R.id.tvSalesAmount);
+        walletArea = findViewById(R.id.Walletbox);
+        RefreshWalletbyImage = findViewById(R.id.ivRefresh);
+
 
         // Visibility Toggle
         ivVisibility.setOnClickListener(v -> {
@@ -109,13 +127,28 @@ public class FarmerDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(FarmerDashboardActivity.this, ReviewsActivity.class);
             startActivity(intent);
         });
+
+        walletArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to switch activities
+                Intent intent = new Intent(FarmerDashboardActivity.this, WalletActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        RefreshWalletbyImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshWalletUI();
+            }
+        });
     }
 
     private void fetchDashboardData() {
-        String userId = sessionManager.getUserId();
-        if (userId == null || userId.isEmpty()) return;
 
-        RetrofitClient.getApiService(this).getDashboard(userId).enqueue(new Callback<DashboardService.DashboardResponse>() {
+        RetrofitClient.getApiService(this).getDashboard().enqueue(new Callback<DashboardService.DashboardResponse>() {
             @Override
             public void onResponse(Call<DashboardService.DashboardResponse> call,
                                    Response<DashboardService.DashboardResponse> response) {
@@ -127,9 +160,13 @@ public class FarmerDashboardActivity extends AppCompatActivity {
                     set_walletBalance(data.getWallet_amt() != null ? data.getWallet_amt() : "0.00");
                     todaySales = data.getTodayIncome() != null ? data.getTodayIncome() : "0.00";
 
-                    // Update greeting and wallet UI
-                    updateGreeting();
-                    refreshWalletUI(data);
+                    // Update UI on main thread - REMOVED refreshWalletUI()
+                    runOnUiThread(() -> {
+                        updateGreeting(fullName);
+                        // Update wallet display directly
+                        tvWalletBalance.setText(String.format("NRs. %s", walletBalance));
+                        tvSalesAmount.setText(String.format("NRs. %s", todaySales));
+                    });
                 }
             }
 
@@ -141,32 +178,81 @@ public class FarmerDashboardActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void updateGreeting() {
+    public void updateGreeting(String name) {
         int timeOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String greeting;
 
         if (timeOfDay < 12) {
-            greeting = getString(R.string.good_morning);
+            greeting = "Good Morning";
         } else if (timeOfDay < 16) {
-            greeting = getString(R.string.good_afternoon);
+            greeting = "Good Afternoon";
         } else if (timeOfDay < 21) {
-            greeting = getString(R.string.good_evening);
+            greeting = "Good Evening";
         } else {
-            greeting = getString(R.string.good_night);
+            greeting = "Good Night";
         }
+        //greeting = greeting + ", " + name;
 
         TextView tvGreeting = findViewById(R.id.tvGreeting);
-        tvGreeting.setText(String.format("%s, %s", greeting, fullName));
+        tvGreeting.setText(String.format("%s, %s", greeting, name));
     }
 
-    private void refreshWalletUI(DashboardService.DashboardResponse data) {
-        TextView tvTodaysLabel = findViewById(R.id.tvTodaysSalesLabel);
-        TextView tvWalletBalance = findViewById(R.id.tvWalletBalance);
-        TextView tvSalesAmount = findViewById(R.id.tvSalesAmount);
+    private void refreshWalletUI() {
+        RetrofitClient.getApiService(this).getRefreshWallet()
+                .enqueue(new Callback<RefreshWallet.refreshWalletResponse>() {
+                    @Override
+                    public void onResponse(Call<RefreshWallet.refreshWalletResponse> call,
+                                           Response<RefreshWallet.refreshWalletResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            RefreshWallet.refreshWalletResponse data = response.body();
 
-        String label = "Farmer".equals(userType) ? getString(R.string.todays_sales) : getString(R.string.todays_expenses);
-        tvTodaysLabel.setText(label);
-        tvWalletBalance.setText(String.format("NRs. %s", get_walletBalance()));
-        tvSalesAmount.setText(String.format("NRs. %s", todaySales));
+                            String balance = data.getBalance() != null ? data.getBalance() : "0.00";
+                            String todaysIncome = data.getTodaysIncome() != null ? data.getTodaysIncome() : "0.00";
+
+                            // Update local variables too!
+                            set_walletBalance(balance);
+                            todaySales = todaysIncome;
+
+                            // Update UI
+                            tvWalletBalance.setText(String.format("NRs. %s", balance));
+                            tvSalesAmount.setText(String.format("NRs. %s", todaysIncome));
+
+                            Toast.makeText(FarmerDashboardActivity.this,
+                                    "Wallet refreshed",
+                                    Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            // Parse error from response body
+                            String errorMessage = "Failed to load wallet data";
+
+                            if (response.errorBody() != null) {
+                                try {
+                                    String errorBody = response.errorBody().string();
+                                    RefreshWallet.refreshWalletResponse errorResponse =
+                                            new Gson().fromJson(errorBody, RefreshWallet.refreshWalletResponse.class);
+
+                                    if (errorResponse != null && errorResponse.getError() != null) {
+                                        errorMessage = errorResponse.getError();
+                                    }
+                                } catch (Exception e) {
+                                    errorMessage = "Error: " + response.code();
+                                }
+                            }
+
+                            Toast.makeText(FarmerDashboardActivity.this,
+                                    errorMessage,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RefreshWallet.refreshWalletResponse> call, Throwable t) {
+                        Toast.makeText(FarmerDashboardActivity.this,
+                                "Network Error: " + t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
+
+
 }
