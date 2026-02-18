@@ -52,7 +52,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="wallet_nrp">Wallet (NRP)</string>
+    <string name="wallet_nrp">Wallet (NPR)</string>
     <string name="wallet_balance">5250.72</string>
     <string name="todays_sales">Today\'s Sales:</string>
     <string name="todays_expenses">Today\'s Expenses:</string>
@@ -75,6 +75,16 @@
     <string name="cant_remember_details">Can\'t remember your details? %1$s</string>
     <string name="contact_farmo_support">Contact Farmo Support</string>
     <string name="greeting">Greeting</string>
+    <string name="see_all">See all</string>
+    <string name="recent_transactions">Recent Transactions</string>
+    <string name="load">Load</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="send_money">Send Money</string>
+    <string name="receive">Receive</string>
+    <string name="pay_farmer">Pay Farmer</string>
+    <string name="order_payment">Order Payment</string>
+    <string name="npr">NPR</string>
+
     <string name="refresh_wallet">Refresh Wallet</string>
     <string name="add_product">Add Product</string>
     <string name="add_nproduct">Add\nProduct</string>
