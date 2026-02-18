@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.commonActivities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.farmo.R;
+import com.farmo.activities.authActivities.LoginActivity;
 import com.farmo.network.RetrofitClient;
 import com.farmo.network.User.ProfileResponse;
 import com.farmo.utils.SessionManager;

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Farmo"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name=".activities.wallet.WalletActivity"
+            android:name=".activities.commonActivities.WalletActivity"
             android:exported="false" />
         <activity
             android:name=".activities.consumerActivities.ConsumerDashboardActivity"
@@ -24,43 +24,40 @@
             android:name=".activities.farmerActivities.AddProductActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.OrdersActivity"
+            android:name=".activities.commonActivities.OrdersActivity"
             android:exported="false" />
         <activity
             android:name=".activities.farmerActivities.MyProductsActivity"
             android:exported="false" />
         <activity
-            android:name=".MyEarningsActivity"
+            android:name=".activities.farmerActivities.ReviewsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ReviewsActivity"
+            android:name=".activities.commonActivities.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".activities.authActivities.Login_ActivateAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ActivateAccountActivity"
+            android:name=".activities.authActivities.FP_IdentifyUserActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.IdentifyUserActivity"
+            android:name=".activities.authActivities.FP_ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ResetPasswordActivity"
+            android:name=".activities.authActivities.FP_VerifyOtpActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.VerifyOtpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.ForgotPasswordActivity"
+            android:name=".activities.authActivities.FP_ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".activities.farmerActivities.FarmerDashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SignupActivity"
+            android:name=".activities.authActivities.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.authActivities.LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmo.R;
-import com.farmo.activities.ProfileActivity;
+import com.farmo.activities.commonActivities.ProfileActivity;
 import com.farmo.utils.SessionManager;
 
 public class ConsumerDashboardActivity extends AppCompatActivity {

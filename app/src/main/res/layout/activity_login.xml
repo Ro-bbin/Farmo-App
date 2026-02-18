@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:background="@color/light_topical_forest"
     android:padding="24dp"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.authActivities.LoginActivity">
 
     <ImageView
         android:id="@+id/iv_logo"

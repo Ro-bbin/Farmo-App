@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.authActivities;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActivateAccountActivity extends AppCompatActivity {
+public class Login_ActivateAccountActivity extends AppCompatActivity {
 
     private TextInputEditText etOldPassword, etNewPassword, etConfirmNewPassword;
     private MaterialButton btnActivate;
@@ -74,17 +74,17 @@ public class ActivateAccountActivity extends AppCompatActivity {
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
-                    Toast.makeText(ActivateAccountActivity.this, "Account Activated Successfully!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login_ActivateAccountActivity.this, "Account Activated Successfully!", Toast.LENGTH_LONG).show();
                     finish(); // Go back to login
                 } else {
-                    Toast.makeText(ActivateAccountActivity.this, "Activation failed. Check your current password.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_ActivateAccountActivity.this, "Activation failed. Check your current password.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<MessageResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(ActivateAccountActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login_ActivateAccountActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
     }

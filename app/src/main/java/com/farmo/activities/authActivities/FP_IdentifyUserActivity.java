@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.authActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IdentifyUserActivity extends AppCompatActivity {
+public class FP_IdentifyUserActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
@@ -92,7 +92,7 @@ public class IdentifyUserActivity extends AppCompatActivity {
                 ClickableSpan clickableSpan = new ClickableSpan() {
                     @Override
                     public void onClick(@NonNull View widget) {
-                        Toast.makeText(IdentifyUserActivity.this, "Opening support...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FP_IdentifyUserActivity.this, "Opening support...", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -118,24 +118,24 @@ public class IdentifyUserActivity extends AppCompatActivity {
         
         RetrofitClient.getApiService(this).forgotPassword(request).enqueue(new Callback<ForgotPasswordResponse>() {
             @Override
-            public void onResponse(Call<ForgotPasswordResponse> call, Response<ForgotPasswordResponse> response) {
+            public void onResponse(@NonNull Call<ForgotPasswordResponse> call, @NonNull Response<ForgotPasswordResponse> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
                     ForgotPasswordResponse res = response.body();
                     
-                    Intent intent = new Intent(IdentifyUserActivity.this, ForgotPasswordActivity.class);
+                    Intent intent = new Intent(FP_IdentifyUserActivity.this, FP_ForgotPasswordActivity.class);
                     intent.putExtra("USER_ID", res.getUserId());
                     intent.putExtra("HALF_EMAIL", res.getHalfEmail());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(IdentifyUserActivity.this, "User not found or inactive", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FP_IdentifyUserActivity.this, "User not found or inactive", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ForgotPasswordResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ForgotPasswordResponse> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(IdentifyUserActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_IdentifyUserActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
     }

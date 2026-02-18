@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Activate Account"
+        android:text="@string/activate_account"
         android:textAlignment="center"
         android:textColor="#1A1C1E"
         android:textSize="24sp"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Please change your temporary password to activate your account."
+        android:text="@string/please_change_your_temporary_password_to_activate_your_account"
         android:textSize="16sp" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:hint="Current Password"
+        android:hint="@string/current_password"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="New Password"
+        android:hint="@string/new_password"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Confirm New Password"
+        android:hint="@string/confirm_new_password"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -77,6 +77,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:padding="12dp"
-        android:text="Activate Account" />
+        android:text="@string/activate_account" />
 
 </LinearLayout>

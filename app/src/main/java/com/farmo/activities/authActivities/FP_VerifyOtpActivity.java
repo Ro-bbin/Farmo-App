@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.authActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmo.R;
@@ -23,13 +24,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class VerifyOtpActivity extends AppCompatActivity {
+public class FP_VerifyOtpActivity extends AppCompatActivity {
 
     private TextView tvTimer, tvResendCode;
     private CountDownTimer countDownTimer;
-    private Button btnVerify;
     private EditText etOtp;
-    private LinearLayout btnBack;
     private ProgressDialog progressDialog;
     private String userId;
 
@@ -42,9 +41,9 @@ public class VerifyOtpActivity extends AppCompatActivity {
 
         tvTimer = findViewById(R.id.tvTimer);
         tvResendCode = findViewById(R.id.tvResendCode);
-        btnVerify = findViewById(R.id.btnVerify);
+        Button btnVerify = findViewById(R.id.btnVerify);
         etOtp = findViewById(R.id.etOtp);
-        btnBack = findViewById(R.id.btnBack);
+        LinearLayout btnBack = findViewById(R.id.btnBack);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Verifying OTP...");
@@ -52,11 +51,11 @@ public class VerifyOtpActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> onBackPressed());
 
-        startTimer();
+        startTimer(5);
 
         tvResendCode.setOnClickListener(v -> {
             Toast.makeText(this, "OTP Resent!", Toast.LENGTH_SHORT).show();
-            startTimer();
+            startTimer(5);
         });
 
         btnVerify.setOnClickListener(v -> {
@@ -76,10 +75,10 @@ public class VerifyOtpActivity extends AppCompatActivity {
         
         RetrofitClient.getApiService(this).verifyOtp(request).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 progressDialog.dismiss();
                 if (response.code() == 202 || response.isSuccessful()) {
-                    Intent intent = new Intent(VerifyOtpActivity.this, ResetPasswordActivity.class);
+                    Intent intent = new Intent(FP_VerifyOtpActivity.this, FP_ResetPasswordActivity.class);
                     intent.putExtra("USER_ID", userId);
                     startActivity(intent);
                     finish();
@@ -89,9 +88,9 @@ public class VerifyOtpActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MessageResponse> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(VerifyOtpActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_VerifyOtpActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -104,23 +103,25 @@ public class VerifyOtpActivity extends AppCompatActivity {
                 String msg = (errorResponse != null && errorResponse.getError() != null) 
                         ? errorResponse.getError() 
                         : "Invalid or expired OTP";
-                Toast.makeText(VerifyOtpActivity.this, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(FP_VerifyOtpActivity.this, msg, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Toast.makeText(VerifyOtpActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_VerifyOtpActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(VerifyOtpActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(FP_VerifyOtpActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void startTimer() {
+    private void startTimer(int minutes) {
         if (countDownTimer != null) countDownTimer.cancel();
-        
-        countDownTimer = new CountDownTimer(600000, 1000) {
+
+        long durationInMillis = (long) minutes * 60 * 1000; // convert minutes to milliseconds
+
+        countDownTimer = new CountDownTimer(durationInMillis, 1000) {
             public void onTick(long millisUntilFinished) {
-                int minutes = (int) (millisUntilFinished / 1000) / 60;
-                int seconds = (int) (millisUntilFinished / 1000) % 60;
-                tvTimer.setText(String.format("Code expires in %02d:%02d", minutes, seconds));
+                int min = (int) (millisUntilFinished / 1000) / 60;
+                int sec = (int) (millisUntilFinished / 1000) % 60;
+                tvTimer.setText(String.format("Code expires in %02d:%02d", min, sec));
                 tvResendCode.setEnabled(false);
                 tvResendCode.setTextColor(Color.GRAY);
             }
@@ -132,6 +133,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
             }
         }.start();
     }
+
 
     @Override
     protected void onDestroy() {

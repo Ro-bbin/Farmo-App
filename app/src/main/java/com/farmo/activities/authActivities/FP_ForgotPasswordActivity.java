@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.authActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class FP_ForgotPasswordActivity extends AppCompatActivity {
 
     private TextInputEditText etEmailInput;
     private TextInputLayout tilEmailInput;
@@ -108,7 +108,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ForgotPasswordResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(ForgotPasswordActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_ForgotPasswordActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -122,8 +122,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
-                    Toast.makeText(ForgotPasswordActivity.this, "OTP sent successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(ForgotPasswordActivity.this, VerifyOtpActivity.class);
+                    Toast.makeText(FP_ForgotPasswordActivity.this, "OTP sent successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(FP_ForgotPasswordActivity.this, FP_VerifyOtpActivity.class);
                     intent.putExtra("USER_ID", userId);
                     startActivity(intent);
                 } else {
@@ -134,7 +134,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<MessageResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(ForgotPasswordActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_ForgotPasswordActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -147,12 +147,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 String msg = (errorResponse != null && errorResponse.getError() != null) 
                         ? errorResponse.getError() 
                         : "Error: " + response.code();
-                Toast.makeText(ForgotPasswordActivity.this, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(FP_ForgotPasswordActivity.this, msg, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Toast.makeText(ForgotPasswordActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_ForgotPasswordActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(ForgotPasswordActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(FP_ForgotPasswordActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
         }
     }
 }

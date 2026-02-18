@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.commonActivities;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

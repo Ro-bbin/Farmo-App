@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.authActivities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmo.R;
@@ -134,7 +135,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.show();
         RetrofitClient.getApiService(this).register(request).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(SignupActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
@@ -254,7 +255,7 @@ public class SignupActivity extends AppCompatActivity {
             is.close();
             json = new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             return null;
         }
         return json;

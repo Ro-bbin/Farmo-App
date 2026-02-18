@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.authActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         forgotPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, IdentifyUserActivity.class);
+            Intent intent = new Intent(LoginActivity.this, FP_IdentifyUserActivity.class);
             startActivity(intent);
         });
 
@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
         cbRememberMe = findViewById(R.id.cb_remember_me);
         findViewById(R.id.btn_login).setOnClickListener(v -> performLogin());
         findViewById(R.id.tv_forgot_password).setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, IdentifyUserActivity.class);
+            Intent intent = new Intent(LoginActivity.this, FP_IdentifyUserActivity.class);
             startActivity(intent);
         });
         findViewById(R.id.tv_signup).setOnClickListener(v -> {
@@ -192,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                         String errorBody = response.errorBody().string();
                         LoginResponse errorResponse = new Gson().fromJson(errorBody, LoginResponse.class);
                         if (response.code() == 403 && errorResponse != null && "ACCOUNT_PENDING".equals(errorResponse.getErrorCode())) {
-                            Intent intent = new Intent(LoginActivity.this, ActivateAccountActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, Login_ActivateAccountActivity.class);
                             intent.putExtra("USER_ID", identifier);
                             intent.putExtra("CURRENT_PASSWORD", password);
                             startActivity(intent);

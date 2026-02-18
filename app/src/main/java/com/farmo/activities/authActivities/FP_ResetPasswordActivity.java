@@ -1,4 +1,4 @@
-package com.farmo.activities;
+package com.farmo.activities.authActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -25,11 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ResetPasswordActivity extends AppCompatActivity {
+public class FP_ResetPasswordActivity extends AppCompatActivity {
 
     private TextInputEditText etNewPassword, etConfirmPassword;
-    private Button btnResetPassword;
-    private LinearLayout btnBack;
     private String userId;
     private ProgressDialog progressDialog;
 
@@ -54,8 +53,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         etNewPassword = findViewById(R.id.etNewPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
-        btnResetPassword = findViewById(R.id.btnResetPassword);
-        btnBack = findViewById(R.id.btnBack);
+        Button btnResetPassword = findViewById(R.id.btnResetPassword);
+        LinearLayout btnBack = findViewById(R.id.btnBack);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating password...");
@@ -86,16 +85,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
         
         RetrofitClient.getApiService(this).changePassword(request).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
                     String successMsg = response.body().getMessage();
                     if (successMsg == null || successMsg.isEmpty()) {
                         successMsg = "Password changed successfully!";
                     }
-                    Toast.makeText(ResetPasswordActivity.this, successMsg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(FP_ResetPasswordActivity.this, successMsg, Toast.LENGTH_LONG).show();
                     
-                    Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(FP_ResetPasswordActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
@@ -105,9 +104,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MessageResponse> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(ResetPasswordActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_ResetPasswordActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -120,12 +119,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 String msg = (errorResponse != null && errorResponse.getError() != null) 
                         ? errorResponse.getError() 
                         : "Error: " + response.code();
-                Toast.makeText(ResetPasswordActivity.this, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(FP_ResetPasswordActivity.this, msg, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Toast.makeText(ResetPasswordActivity.this, "Failed to reset password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FP_ResetPasswordActivity.this, "Failed to reset password", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(ResetPasswordActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(FP_ResetPasswordActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
         }
     }
 }

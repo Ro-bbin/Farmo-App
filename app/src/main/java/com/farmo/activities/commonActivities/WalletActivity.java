@@ -1,4 +1,4 @@
-package com.farmo.activities.wallet;
+package com.farmo.activities.commonActivities;
 
 import android.os.Bundle;
 
