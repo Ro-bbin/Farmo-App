@@ -115,11 +115,12 @@ public class ProfileActivity extends AppCompatActivity {
                                 ivProfileImage.setImageBitmap(decodedByte);
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
                             // Keep default/placeholder image
+                            ivProfileImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pp__placeholder));
                         }
                     }
                 }
+                ivProfileImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pp__placeholder));
                 // If failed or no image, keep the default/placeholder image
             }
 

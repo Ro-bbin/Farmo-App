@@ -61,7 +61,7 @@ public interface ApiService {
             @Header("token") String token,
             @Header("user-id") String userId);
 
-    @POST("api/file/download")
+    @POST("api/file/download/")
     Call<ProfileServices.FileDownloadResponse> downloadFile(
             @Header("user-id") String userId,
             @Header("token") String token,
