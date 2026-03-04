@@ -27,6 +27,7 @@ import com.farmo.R;
 import com.farmo.activities.commonActivities.BazarActivity;
 import com.farmo.activities.commonActivities.ProfileActivity;
 import com.farmo.activities.commonActivities.SettingsActivity;
+import com.farmo.activities.commonActivities.ShowConnectionActivity;
 import com.farmo.activities.commonActivities.WalletActivity;
 import com.farmo.network.Dashboard.DashboardService;
 import com.farmo.network.Dashboard.RefreshWallet;
@@ -317,6 +318,16 @@ public class FarmerDashboardActivity extends AppCompatActivity {
 
         findViewById(R.id.Walletbox).setOnClickListener(v ->{
             Intent intent = new Intent(FarmerDashboardActivity.this, WalletActivity.class);
+            startActivity(intent);
+        });
+
+        findViewById(R.id.btnconnection).setOnClickListener(v -> {
+            Intent intent = new Intent(FarmerDashboardActivity.this, ShowConnectionActivity.class);
+            startActivity(intent);
+        });
+
+        findViewById(R.id.addProduct).setOnClickListener(v ->{
+            Intent intent = new Intent(FarmerDashboardActivity.this, AddProductActivity.class);
             startActivity(intent);
         });
 

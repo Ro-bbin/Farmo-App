@@ -110,4 +110,8 @@
     <string name="new_password_label">New Password</string>
     <string name="confirm_new_password_label">Confirm New Password</string>
     <string name="proceed">Proceed</string>
+
+    <string name="search_bazar">Search in Bazar...</string>
+    <string name="bazar_market_place">Bazar [Market Place]</string>
+    <string name="see_more">See More ▼</string>
 </resources>

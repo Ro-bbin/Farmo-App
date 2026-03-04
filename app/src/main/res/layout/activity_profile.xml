@@ -192,10 +192,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-<<<<<<< HEAD
-            <!-- Logout Section -->
-            <com.google.android.material.button.MaterialButton
-=======
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -229,7 +226,6 @@
             </LinearLayout>
             <!-- Logout Button -->
             <Button
->>>>>>> 6a40fd88519dd67f0e7fd5f87bac9476e374b033
                 android:id="@+id/btnLogout"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"

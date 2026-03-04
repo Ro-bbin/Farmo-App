@@ -9,11 +9,8 @@
 
     <color name="nav_active">#2E7D32</color>
     <color name="nav_inactive">#78909C</color>
-<<<<<<< HEAD
     <color name="green_primary">#2D6A4F</color>
-=======
     <color name="blueButton">#2563eb</color>
     <color name="greenButton">#16a34a</color>
 
->>>>>>> 6a40fd88519dd67f0e7fd5f87bac9476e374b033
 </resources>

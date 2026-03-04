@@ -1,5 +1,6 @@
 package com.farmo.activities.farmerActivities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmo.R;
+import com.farmo.network.CommonServices.MyProductService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,15 +37,9 @@ public class MyProductsActivity extends AppCompatActivity {
     private TextView     tabVegetables;
     private TextView     tabGrains;
 
-    // ── DATA ──────────────────────────────────────────────────────────────────
-    private final List<Product> allProducts = new ArrayList<>();
 
-    // ── MODEL ─────────────────────────────────────────────────────────────────
-    static class Product {
-        String id, name, category, status, image;
-        String price, priceUnit, stock, stockUnit;
-        boolean isActive;
-    }
+    // ── DATA ──────────────────────────────────────────────────────────────────
+    private final List<MyProductService> allProducts = new ArrayList<>();
 
     // =========================================================================
     //  LIFECYCLE
@@ -65,6 +61,12 @@ public class MyProductsActivity extends AppCompatActivity {
     private void initViews() {
         productContainer = findViewById(R.id.productContainer);
         noDataView       = findViewById(R.id.noDataView);
+
+
+        findViewById(R.id.fabAddProduct).setOnClickListener(v ->{
+            Intent intent = new Intent(MyProductsActivity.this, AddProductActivity.class);
+            startActivity(intent);
+        });
 
     }
 
@@ -165,14 +167,14 @@ public class MyProductsActivity extends AppCompatActivity {
     // =========================================================================
     //  PARSE JSON → List<Product>
     // =========================================================================
-    private List<Product> parseProducts(String json) {
-        List<Product> out = new ArrayList<>();
+    private List<MyProductService> parseProducts(String json) {
+        List<MyProductService> out = new ArrayList<>();
         try {
             JSONArray arr = new JSONArray(json);
             Log.d(TAG, "JSON count: " + arr.length());
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject o = arr.getJSONObject(i);
-                Product p    = new Product();
+                MyProductService p    = new MyProductService();
                 p.id         = o.optString("id",        String.valueOf(i));
                 p.name       = o.optString("name",      "Unnamed");
                 p.category   = o.optString("category",  "Other");
@@ -200,7 +202,7 @@ public class MyProductsActivity extends AppCompatActivity {
         productContainer.removeAllViews();
 
         boolean hasData = false;
-        for (Product p : allProducts) {
+        for (MyProductService p : allProducts) {
             boolean match = category.equalsIgnoreCase("All Products")
                     || p.category.equalsIgnoreCase(category);
             if (!match) continue;
@@ -225,7 +227,7 @@ public class MyProductsActivity extends AppCompatActivity {
     //  │         Rs. 120 / kg                                │
     //  └──────────────────────────────────────────────────────┘
     // =========================================================================
-    private void addProductCard(Product product) {
+    private void addProductCard(MyProductService product) {
         View v = LayoutInflater.from(this)
                 .inflate(R.layout.item_product_card, productContainer, false);
 

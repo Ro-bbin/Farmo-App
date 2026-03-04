@@ -78,7 +78,7 @@
             android:exported="false" />
         <activity android:name=".activities.commonActivities.BazarActivity"
             android:exported="false"/>
-<<<<<<< HEAD
+
         <activity android:name=".activities.commonActivities.AboutUsActivity"
             android:exported="false"/>
         <activity android:name=".activities.farmerActivities.FarmerOrderManagementActivity"
@@ -86,9 +86,12 @@
 
         <activity
             android:name=".activities.commonActivities.SettingsActivity"
-=======
+            android:exported="false" />
         <activity android:name=".activities.commonActivities.ShowConnectionActivity"
->>>>>>> 6a40fd88519dd67f0e7fd5f87bac9476e374b033
+
+            android:exported="false"/>
+
+        <activity android:name=".activities.commonActivities.ProductDetailActivity"
             android:exported="false"/>
 
         <activity

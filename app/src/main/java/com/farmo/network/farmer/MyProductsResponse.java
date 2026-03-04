@@ -1,7 +1,7 @@
-package com.farmo.model;
+package com.farmo.network.farmer;
 
+import com.farmo.network.CommonServices.MyProductService;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class MyProductsResponse {
@@ -10,7 +10,7 @@ public class MyProductsResponse {
     private String status;
 
     @SerializedName("products")
-    private List<Product> products;
+    private List<MyProductService> products;
 
     @SerializedName("error")
     private String error;
@@ -18,12 +18,12 @@ public class MyProductsResponse {
     // ── Getters ───────────────────────────────────────────────────────────────
 
     public String       getStatus()   { return status; }
-    public List<Product> getProducts() { return products; }
+    public List<MyProductService> getProducts() { return products; }
     public String       getError()    { return error; }
 
     // ── Setters ───────────────────────────────────────────────────────────────
 
     public void setStatus(String status)             { this.status = status; }
-    public void setProducts(List<Product> products)  { this.products = products; }
+    public void setProducts(List<MyProductService> products)  { this.products = products; }
     public void setError(String error)               { this.error = error; }
 }

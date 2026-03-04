@@ -23,17 +23,82 @@
             android:layout_centerVertical="true"
             android:clickable="true"
             android:focusable="true"
+            android:contentDescription="@string/farmo_logo"
             android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
         <TextView
+            android:id="@+id/tvCategoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Bazar [Market Place]"
+            android:text="@string/bazar_market_place"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
+
+    <!-- ── SEARCH BAR (Matches MyProduct Style) ──────────────────────────── -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="79dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/custom_header_bg"
+            android:orientation="horizontal" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:paddingEnd="5dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@string/search_user"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/etSearchBazar"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/search_bazar"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingStart="10dp"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/btnSearchAction"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/topical_forest"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Search Button" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
     <!-- Sort & Filter spinners -->
     <LinearLayout
@@ -107,7 +172,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="28dp"
                 android:backgroundTint="@color/topical_forest"
-                android:text="See More ▼"
+                android:text="@string/see_more"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold"

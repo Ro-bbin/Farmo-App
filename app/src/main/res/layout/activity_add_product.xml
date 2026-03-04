@@ -7,23 +7,23 @@
     android:background="@color/light_topical_forest"
     android:orientation="vertical">
 
-    <!-- Header -->
+    <!-- ── Top bar ─────────────────────────────────────────────────────────── -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="@color/topical_forest">
+        android:background="@color/topical_forest"
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_back_arrow"
-            app:tint="@color/white"
             android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+            android:src="@drawable/ic_back_arrow"
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,9 +45,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/white">
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,24 +55,8 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Product ID -->
-                <TextView android:text="Product ID*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etProductId"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="P-0001"
-                        android:enabled="false"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Product Name -->
-                <TextView android:text="Product Name*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
+                <!-- ── Product Name ─────────────────────────────────────────── -->
+                <TextView style="@style/FieldLabel" android:text="Product Name*" />
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -83,63 +67,45 @@
                         android:id="@+id/etProductName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"/>
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Category -->
-                <TextView android:text="Category*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
+                <!-- ── Product Type ─────────────────────────────────────────────
+                     OutlinedBox (NOT ExposedDropdownMenu) — lets user type freely.
+                     NoFilterArrayAdapter in Java ensures API results always show. -->
+                <TextView
+                    style="@style/FieldLabel"
+                    android:text="Product Type*" />
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="12dp">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="e.g., Vegetables, Fruits, Grains"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Organic Status -->
-                <TextView android:text="Organic Status*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp">
                     <AutoCompleteTextView
-                        android:id="@+id/spinnerOrganic"
+                        android:id="@+id/autoCompleteProductType"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Organic"
-                        android:inputType="none" />
+                        android:layout_height="50dp"
+                        android:completionThreshold="1"
+                        android:dropDownHeight="200dp"
+                        android:hint="Search type (e.g. Grain)"
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Quantity and Unit -->
+                <!-- ── Unit + Quantity ──────────────────────────────────────── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="2">
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="8dp">
-                        <TextView android:text="Quantity Available*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="12dp">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etQuantity"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:text="Unit*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:text="Unit*" />
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
@@ -150,14 +116,34 @@
                                 android:id="@+id/spinnerUnit"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Kilogram (kg)"
+                                android:hint="Select"
                                 android:inputType="none" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:text="Quantity*" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="12dp">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etQuantity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Cost Per Unit -->
-                <TextView android:text="Cost Per Unit (NPR)*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
+                <!-- ── Price per unit ───────────────────────────────────────── -->
+                <TextView style="@style/FieldLabel" android:text="Price Per Unit (NPR)*" />
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -165,15 +151,217 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="12dp">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etCostPerUnit"
+                        android:id="@+id/etPricePerUnit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="0.00"
-                        android:inputType="numberDecimal"/>
+                        android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Description -->
-                <TextView android:text="Description" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
+                <!-- ── Dates row ─────────────────────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:text="Produced Date" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            app:endIconDrawable="@drawable/ic_calendar_medium_gray"
+                            app:endIconMode="custom">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etProducedDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:hint="yyyy-MM-dd" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:text="Expiry Date" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            app:endIconDrawable="@drawable/ic_calendar_medium_gray"
+                            app:endIconMode="custom">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etExpiryDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:hint="yyyy-MM-dd" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ── Is Organic ────────────────────────────────────────────── -->
+                <TextView style="@style/FieldLabel" android:layout_marginTop="4dp" android:text="Organic*" />
+                <RadioGroup
+                    android:id="@+id/rgOrganic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/rbOrganic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="Organic" />
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/rbNotOrganic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Not Organic" />
+                </RadioGroup>
+
+                <!-- ── Discount Type + Discount ──────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:text="Discount Type*" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp">
+                            <AutoCompleteTextView
+                                android:id="@+id/spinnerDiscountType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:text="Percentage" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:text="Discount" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etDiscount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="0"
+                                android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ── Delivery Options ──────────────────────────────────────── -->
+                <TextView style="@style/FieldLabel" android:layout_marginTop="4dp" android:text="Delivery Options*" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbAvailable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Available" />
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbNotAvailable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not Available" />
+                </LinearLayout>
+
+                <!-- ── Keywords ────────────────────────────────────────────────
+                     OutlinedBox so typing is NOT blocked.
+                     Row: [search field 50dp tall] + [✓ tick button 50dp]
+                     NoFilterArrayAdapter in Java ensures suggestions show.   -->
+                <TextView style="@style/FieldLabel" android:layout_marginTop="4dp" android:text="Keywords" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteKeywordSearch"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:completionThreshold="1"
+                            android:dropDownHeight="200dp"
+                            android:hint="Search or type keyword"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:paddingBottom="0dp"
+                            android:paddingTop="0dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Tick button: adds typed keyword as chip -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddKeyword"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:padding="0dp"
+                        android:text="✓"
+                        android:textSize="18sp"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
+                <!-- Chips for selected keywords -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupKeywords"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="12dp"
+                    app:chipSpacingHorizontal="4dp"
+                    app:chipSpacingVertical="4dp" />
+
+                <!-- ── Description (optional) ───────────────────────────────── -->
+                <TextView style="@style/FieldLabel" android:text="Description" />
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -184,139 +372,57 @@
                         android:id="@+id/etDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minLines="3"
                         android:gravity="top"
-                        android:inputType="textMultiLine"/>
+                        android:hint="Optional"
+                        android:inputType="textMultiLine"
+                        android:minLines="3" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Produced Date -->
-                <TextView android:text="Produced Date*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp"
-                    app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/ic_calendar_medium_gray">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etProducedDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="mm/dd/yyyy"
-                        android:focusable="false"
-                        android:clickable="true"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Delivery Options -->
-                <TextView android:text="Delivery Options*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp" android:layout_marginBottom="4dp"/>
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbHomeDelivery"
+                <!-- ── Product Images ────────────────────────────────────────── -->
+                <TextView style="@style/FieldLabel" android:text="Product Images (Max 5 · 20 MB each)" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnUploadMedia"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Home Delivery"
-                    android:minHeight="0dp"
-                    android:padding="0dp"/>
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbPickup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pickup"
-                    android:minHeight="0dp"
-                    android:padding="0dp"/>
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbBoth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Both"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginTop="8dp"
+                    android:text="Choose Files" />
 
-                <!-- Product Status -->
-                <TextView android:text="Product Status*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvMediaPreview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp">
-                    <AutoCompleteTextView
-                        android:id="@+id/spinnerProductStatus"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Available"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_image_preview" />
 
-                <!-- Select Farmer -->
-                <TextView android:text="Select Farmer*" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp">
-                    <AutoCompleteTextView
-                        android:id="@+id/spinnerSelectFarmer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="-- Select Farmer --"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Product Images -->
-                <TextView android:text="Product Images (Multiple)" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/black" android:textSize="14sp"/>
+                <!-- ── Action buttons ────────────────────────────────────────── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/edittext_border"
-                    android:padding="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="24dp">
-                    <Button
-                        android:id="@+id/btnChooseFiles"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Choose Files"
-                        android:textAllCaps="false"
-                        android:backgroundTint="#E0E0E0"
-                        android:textColor="@color/black"
-                        style="@style/Widget.Material3.Button.TonalButton"/>
-                    <TextView
-                        android:id="@+id/tvNoFileChosen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="No file chosen"
-                        android:layout_marginStart="12dp"
-                        android:textColor="@color/medium_gray"/>
-                </LinearLayout>
+                    android:layout_marginTop="24dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
 
-                <!-- Action Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="end">
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cancel"
-                        android:textAllCaps="false"
-                        android:backgroundTint="#607D8B"
                         android:layout_marginEnd="8dp"
-                        app:cornerRadius="8dp"/>
+                        android:backgroundTint="#607D8B"
+                        android:text="Cancel"
+                        app:cornerRadius="8dp" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAddProduct"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="#2196F3"
                         android:text="Add Product"
                         android:textAllCaps="false"
-                        android:backgroundTint="@color/topical_forest"
-                        app:cornerRadius="8dp"/>
+                        android:textColor="@color/white"
+                        app:cornerRadius="8dp" />
                 </LinearLayout>
 
             </LinearLayout>
