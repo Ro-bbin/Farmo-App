@@ -7,17 +7,17 @@ public class DashboardService {
 
     }
 
-    public static class DashboardResponse{
+    public static class DashboardResponse {
         @SerializedName("username")
         private String Username;
 
-        @SerializedName("wallet_ammount")
+        @SerializedName("wallet_balance")
         private String wallet_amt;
 
-        @SerializedName("today_income")
-        private String today_income;
+        @SerializedName("today_expense")
+        private String today_expense;
 
-        @SerializedName("my_rating")
+        @SerializedName("rate")
         private String rating;
 
         @SerializedName("error")
@@ -27,8 +27,10 @@ public class DashboardService {
         // --- Getters ---
         public String getUsername() { return Username; }
         public String getWallet_amt() { return wallet_amt; }
-        public String getTodayIncome() { return today_income; }
+        public String getTodayExpense() { return today_expense; }
+
         public String getRating() { return rating; }
+
         public String getError() { return error; }
 
     }

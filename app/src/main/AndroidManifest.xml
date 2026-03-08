@@ -31,9 +31,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Farmo"
         android:usesCleartextTraffic="true">
-
-        <activity android:name=".activities.commonActivities.TransactionActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".activities.commonActivities.OrderDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.commonActivities.TransactionActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.commonActivities.WalletActivity"
             android:exported="false" />
@@ -76,24 +79,24 @@
         <activity
             android:name=".activities.authActivities.SignupActivity"
             android:exported="false" />
-        <activity android:name=".activities.commonActivities.BazarActivity"
-            android:exported="false"/>
-
-        <activity android:name=".activities.commonActivities.AboutUsActivity"
-            android:exported="false"/>
-        <activity android:name=".activities.farmerActivities.FarmerOrderManagementActivity"
-            android:exported="false"/>
-
+        <activity
+            android:name=".activities.commonActivities.BazarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.commonActivities.AboutUsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.farmerActivities.FarmerOrderManagementActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.commonActivities.SettingsActivity"
             android:exported="false" />
-        <activity android:name=".activities.commonActivities.ShowConnectionActivity"
-
-            android:exported="false"/>
-
-        <activity android:name=".activities.commonActivities.ProductDetailActivity"
-            android:exported="false"/>
-
+        <activity
+            android:name=".activities.commonActivities.ShowConnectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.commonActivities.ProductDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.authActivities.LoginActivity"
             android:exported="true">
@@ -113,8 +116,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
-
-
     </application>
 
 </manifest>

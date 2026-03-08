@@ -25,6 +25,7 @@ import androidx.core.widget.NestedScrollView;
 import com.farmo.activities.authActivities.LoginActivity;
 import com.farmo.R;
 import com.farmo.activities.commonActivities.BazarActivity;
+import com.farmo.activities.commonActivities.OrdersActivity;
 import com.farmo.activities.commonActivities.ProfileActivity;
 import com.farmo.activities.commonActivities.SettingsActivity;
 import com.farmo.activities.commonActivities.ShowConnectionActivity;
@@ -34,6 +35,7 @@ import com.farmo.network.Dashboard.RefreshWallet;
 import com.farmo.network.RetrofitClient;
 import com.farmo.utils.SessionManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
@@ -49,10 +51,12 @@ public class FarmerDashboardActivity extends AppCompatActivity {
     private boolean isBalanceVisible = true;
     private String walletBalance = "0.00";
     private String fullName = "UserName";
-    private String todaySales = "0.00";
+    private String todayExpense = "0.00";
+    private String rating = "None";
 
     private SessionManager sessionManager;
-    private TextView tvSalesAmount, tvWalletBalance;
+    private TextView tvSalesAmount, tvWalletBalance, tvTodaysSalesLabel, tvRatingValue;
+    private MaterialButton btn7, btn14, btnMonth;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isManualRefresh = false;
@@ -70,16 +74,19 @@ public class FarmerDashboardActivity extends AppCompatActivity {
 
         if (!sessionManager.isLoggedIn()) {
             Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            redirectToLogin();
             return;
         }
 
         setupUI();
         setupSwipeRefresh();
         fetchDashboardData();
+
+        // Ensure Home is selected in bottom navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        }
     }
 
     @Override
@@ -89,6 +96,12 @@ public class FarmerDashboardActivity extends AppCompatActivity {
             fetchDashboardData();
         } else {
             redirectToLogin();
+        }
+        
+        // Ensure Home is selected when returning to dashboard
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         }
     }
 
@@ -187,14 +200,19 @@ public class FarmerDashboardActivity extends AppCompatActivity {
                             DashboardService.DashboardResponse data = response.body();
 
                             walletBalance = data.getWallet_amt() != null ? data.getWallet_amt() : "0.00";
-                            todaySales = data.getTodayIncome() != null ? data.getTodayIncome() : "0.00";
+                            todayExpense = data.getTodayExpense() != null ? data.getTodayExpense() : "0.00";
                             fullName = data.getUsername() != null ? data.getUsername() : "User";
+                            rating = data.getRating() != null ? data.getRating() : "None";
 
                             runOnUiThread(() -> {
                                 updateGreeting(fullName);
+                                if (tvRatingValue != null) tvRatingValue.setText(rating);
                                 if (isBalanceVisible) {
                                     tvWalletBalance.setText(String.format("NRs. %s", walletBalance));
-                                    tvSalesAmount.setText(String.format("NRs. %s", todaySales));
+                                    tvSalesAmount.setText(String.format("NRs. %s", todayExpense));
+                                } else {
+                                    tvWalletBalance.setText("*****");
+                                    tvSalesAmount.setText("*****");
                                 }
                             });
 
@@ -236,6 +254,15 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         ImageView ivVisibility = findViewById(R.id.ivVisibility);
         tvWalletBalance = findViewById(R.id.tvWalletBalance);
         tvSalesAmount = findViewById(R.id.tvSalesAmount);
+        tvTodaysSalesLabel = findViewById(R.id.tvTodaysSalesLabel);
+        tvRatingValue = findViewById(R.id.tvRatingValue);
+        btn7 = findViewById(R.id.btn7Days);
+        btn14 = findViewById(R.id.btn14Days);
+        btnMonth = findViewById(R.id.btn1Month);
+
+        if (tvTodaysSalesLabel != null) {
+            tvTodaysSalesLabel.setText("Today's Expense:");
+        }
 
         if (tvWalletBalance == null || tvSalesAmount == null || ivVisibility == null) {
             Log.e(TAG, "Critical views not found in layout — check your XML IDs");
@@ -249,11 +276,16 @@ public class FarmerDashboardActivity extends AppCompatActivity {
                 ivVisibility.setImageResource(R.drawable.ic_visibility_off);
             } else {
                 tvWalletBalance.setText(String.format("NRs. %s", walletBalance));
-                tvSalesAmount.setText(String.format("NRs. %s", todaySales));
+                tvSalesAmount.setText(String.format("NRs. %s", todayExpense));
                 ivVisibility.setImageResource(R.drawable.ic_visibility);
             }
             isBalanceVisible = !isBalanceVisible;
         });
+
+        // Time Filters
+        if (btn7 != null) btn7.setOnClickListener(v -> selectTimeFilter(7, btn7));
+        if (btn14 != null) btn14.setOnClickListener(v -> selectTimeFilter(14, btn14));
+        if (btnMonth != null) btnMonth.setOnClickListener(v -> selectTimeFilter(30, btnMonth));
 
         View btnProfile = findViewById(R.id.btnProfile);
         if (btnProfile != null) {
@@ -267,7 +299,13 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.idOrderAnalystics).setOnClickListener(v -> 
-            gotoFarmerOrderManagement());
+            gotoOrderManagement());
+
+        // Add Money & Withdraw
+        findViewById(R.id.btnAddMoney).setOnClickListener(v -> 
+                Toast.makeText(this, "Add Money feature coming soon", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.btnWithdrawMoney).setOnClickListener(v -> 
+                Toast.makeText(this, "Withdraw feature coming soon", Toast.LENGTH_SHORT).show());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
@@ -275,11 +313,7 @@ public class FarmerDashboardActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.navigation_orders) {
-                try {
-                    gotoFarmerOrderManagement();
-                } catch (Exception e) {
-                    Toast.makeText(this, "Orders is under development", Toast.LENGTH_SHORT).show();
-                }
+                gotoOrderManagement();
                 return true;
             } else if (id == R.id.navigation_home) {
                 fetchDashboardData();
@@ -333,9 +367,31 @@ public class FarmerDashboardActivity extends AppCompatActivity {
 
 
     }
+
+    private void selectTimeFilter(int days, MaterialButton selectedBtn) {
+        updateTimeFilterButtonUI(selectedBtn);
+        String label = (days == 7) ? "7 Days Income:" : (days == 14) ? "14 Days Income:" : "1 Month Income:";
+        if (tvTodaysSalesLabel != null) tvTodaysSalesLabel.setText(label);
+        Toast.makeText(this, "Filtering for " + days + " days", Toast.LENGTH_SHORT).show();
+        // Here you would typically call an API with the date range
+    }
+
+    private void updateTimeFilterButtonUI(MaterialButton selectedBtn) {
+        MaterialButton[] buttons = {btn7, btn14, btnMonth};
+        for (MaterialButton btn : buttons) {
+            if (btn == null) continue;
+            if (btn == selectedBtn) {
+                btn.setBackgroundColor(getResources().getColor(R.color.topical_forest));
+                btn.setTextColor(Color.WHITE);
+            } else {
+                btn.setBackgroundColor(Color.TRANSPARENT);
+                btn.setTextColor(getResources().getColor(R.color.topical_forest));
+            }
+        }
+    }
     
-    private void gotoFarmerOrderManagement(){
-        Intent intent = new Intent(this, FarmerOrderManagementActivity.class);
+    private void gotoOrderManagement(){
+        Intent intent = new Intent(this, OrdersActivity.class);
         startActivity(intent);
     }
     @SuppressLint("SetTextI18n")
@@ -347,7 +403,7 @@ public class FarmerDashboardActivity extends AppCompatActivity {
                 : "Good Night";
         TextView tvGreeting = findViewById(R.id.tvGreeting);
         if (tvGreeting != null) {
-            tvGreeting.setText(greeting + ", " + name);
+            tvGreeting.setText(greeting + ",\n" + name);
         }
     }
 
@@ -363,15 +419,18 @@ public class FarmerDashboardActivity extends AppCompatActivity {
                             RefreshWallet.refreshWalletResponse data = response.body();
 
                             String balance = data.getBalance() != null ? data.getBalance() : "0.00";
-                            String todayIncome = data.getTodaysIncome() != null
-                                    ? data.getTodaysIncome() : "0.00";
+                            String todayExpenseVal = data.getTodayExpense() != null
+                                    ? data.getTodayExpense() : "0.00";
 
                             walletBalance = balance;
-                            todaySales = todayIncome;
+                            todayExpense = todayExpenseVal;
 
                             if (isBalanceVisible) {
                                 tvWalletBalance.setText(String.format("NRs. %s", balance));
-                                tvSalesAmount.setText(String.format("NRs. %s", todayIncome));
+                                tvSalesAmount.setText(String.format("NRs. %s", todayExpenseVal));
+                            } else {
+                                tvWalletBalance.setText("*****");
+                                tvSalesAmount.setText("*****");
                             }
 
                             Toast.makeText(FarmerDashboardActivity.this,

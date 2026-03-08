@@ -433,7 +433,7 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp" />
 
-                <!-- Facebook* -->
+                <!-- Facebook -->
                 <TextView style="@style/LabelStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -460,7 +460,7 @@
                         android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- WhatsApp* -->
+                <!-- WhatsApp -->
                 <TextView style="@style/LabelStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -506,11 +506,11 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp" />
 
-                <!-- About* -->
+                <!-- About -->
                 <TextView style="@style/LabelStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="About *" />
+                    android:text="About" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

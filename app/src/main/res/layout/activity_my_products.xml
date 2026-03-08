@@ -89,11 +89,22 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/tvProductCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/btnFilter"
+            android:text="Products 0 are in list."
+            android:textColor="#546E7A"
+            android:textSize="14sp"
+            android:textStyle="italic" />
 
         <LinearLayout
             android:id="@+id/btnFilter"
@@ -170,7 +181,7 @@
                     android:minWidth="80dp"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"
-                    android:text="Out of Stock"
+                    android:text="No Stock"
                     android:textColor="@color/medium_gray"
                     android:textSize="20sp" />
 

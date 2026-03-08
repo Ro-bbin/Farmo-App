@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Row 1: Order ID + Date -->
+        <!-- Row 1: Order ID + Type Label -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,12 +32,18 @@
                 android:textColor="@color/topical_forest" />
 
             <TextView
-                android:id="@+id/tvOrderDate"
+                android:id="@+id/tvOrderTypeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2026-02-26"
-                android:textSize="11sp"
-                android:textColor="#9E9E9E" />
+                android:text="REQUESTED"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="#2196F3"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp" />
 
         </LinearLayout>
 
@@ -48,12 +54,22 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp" />
 
-        <!-- Consumer name -->
+        <!-- Date Row -->
+        <TextView
+            android:id="@+id/tvOrderDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date: 2026-02-26"
+            android:textSize="11sp"
+            android:textColor="#9E9E9E"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- Consumer/Seller name -->
         <TextView
             android:id="@+id/tvConsumerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Consumer: John Doe"
+            android:text="Buyer: John Doe"
             android:textSize="13sp"
             android:textColor="@android:color/black" />
 
@@ -67,32 +83,16 @@
             android:textSize="13sp"
             android:textColor="@android:color/black" />
 
-        <!-- Row: Quantity + Total -->
-        <LinearLayout
+        <!-- Total Amount -->
+        <TextView
+            android:id="@+id/tvTotalAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp">
-
-            <TextView
-                android:id="@+id/tvQuantity"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Qty: 2 kg"
-                android:textSize="12sp"
-                android:textColor="#555555" />
-
-            <TextView
-                android:id="@+id/tvTotalAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rs. 160"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#F57C00" />
-
-        </LinearLayout>
+            android:layout_marginTop="4dp"
+            android:text="Cost: Rs. 160"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#F57C00" />
 
         <!-- Status badge -->
         <TextView
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Pending"
+            android:text="PENDING"
             android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -109,6 +109,12 @@
             android:paddingEnd="10dp"
             android:paddingTop="3dp"
             android:paddingBottom="3dp" />
+
+        <TextView
+            android:id="@+id/tvQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
         <!-- Accept / Reject buttons -->
         <LinearLayout

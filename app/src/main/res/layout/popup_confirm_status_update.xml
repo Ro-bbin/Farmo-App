@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tvPopupTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm Action"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order ID"
+        android:textColor="#757575"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvPopupOrderId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ORD-XXXXXX"
+        android:textColor="#1F1F1F"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:background="#F5F5F5"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/labelOtp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order OTP"
+        android:textColor="#757575"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/etPopupOtp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter OTP"
+        android:textColor="#1F1F1F"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="12dp"
+        android:background="@drawable/edittext_border"
+        android:layout_marginBottom="12dp"
+        android:inputType="textCapCharacters" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Status"
+        android:textColor="#757575"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvPopupNewStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="STATUS"
+        android:textColor="@color/topical_forest"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etPopupMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Add a message (Optional)"
+        android:inputType="textMultiLine"
+        android:minLines="2"
+        android:gravity="top"
+        android:padding="12dp"
+        android:background="@drawable/edittext_border"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPopupCancel"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="#757575" />
+
+        <Button
+            android:id="@+id/btnPopupProceed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Proceed"
+            android:backgroundTint="@color/topical_forest"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -3,23 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0F2F1"
+    android:background="#F5F5F5"
     android:orientation="vertical">
 
     <!-- ── TOP BAR ──────────────────────────────────────────────────────── -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="@color/topical_forest">
+        android:layout_height="60dp"
+        android:background="@color/topical_forest"
+        android:paddingHorizontal="16dp">
 
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
             android:src="@drawable/ic_back_arrow"
-            app:tint="@color/white"
-            android:layout_centerVertical="true"/>
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,121 +30,213 @@
             android:layout_centerInParent="true"
             android:text="Statements"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- ── FILTER BUTTONS ───────────────────────────────────────────────── -->
-    <HorizontalScrollView
+    <!-- ── TYPE FILTER ────────────────────────────────────────────────── -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:elevation="4dp"
+        android:background="@color/white"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="10dp"
-        android:scrollbars="none">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="Type: "
+            android:textStyle="bold"
+            android:textColor="#1F1F1F" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn7Days"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="7 Days"
-                app:cornerRadius="20dp"
-                app:strokeColor="#2E7D32" />
+        <Spinner
+            android:id="@+id/spinnerTransType"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn14Days"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="14 Days"
-                app:cornerRadius="20dp"
-                app:strokeColor="#2E7D32" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn1Month"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="1 Month"
-                app:cornerRadius="20dp"
-                app:strokeColor="#2E7D32" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFilter"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Filter"
-                app:cornerRadius="20dp"
-                app:icon="@android:drawable/ic_menu_manage"
-                app:strokeColor="#2E7D32" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <!-- ── CONTENT AREA ─────────────────────────────────────────────────── -->
-    <ScrollView
+    <!-- ── DATE SELECTORS ─────────────────────────────────────────────── -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingHorizontal="12dp"
+        android:paddingBottom="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/btnDateFrom"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_border"
+            android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical"
-            android:paddingBottom="24dp">
-
-            <!-- Transaction cards injected here -->
-            <LinearLayout
-                android:id="@+id/transactionContainer"
-                android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_marginEnd="4dp">
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-            <!-- Empty state -->
-            <LinearLayout
-                android:id="@+id/noDataView"
-                android:layout_width="match_parent"
+                android:text="From"
+                android:textSize="10sp"
+                android:textColor="@color/medium_gray" />
+            <TextView
+                android:id="@+id/tvDateFrom"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@android:drawable/ic_menu_search"
-                    app:tint="#90A4AE" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="No Transactions Found"
-                    android:textColor="#607D8B"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Try changing your filter settings"
-                    android:textColor="#78909C"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
+                android:text="Select Date"
+                android:textColor="#1F1F1F"
+                android:textSize="14sp" />
         </LinearLayout>
-    </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/btnDateTo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_border"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:layout_marginStart="4dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To"
+                android:textSize="10sp"
+                android:textColor="@color/medium_gray" />
+            <TextView
+                android:id="@+id/tvDateTo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Date"
+                android:textColor="#1F1F1F"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ── QUICK BUTTONS ──────────────────────────────────────────────── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn7Days"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:padding="0dp"
+            android:text="7 Days"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/topical_forest" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn14Days"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:padding="0dp"
+            android:text="14 Days"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/topical_forest" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn1Month"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:padding="0dp"
+            android:text="1 Month"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/topical_forest" />
+    </LinearLayout>
+
+    <!-- ── CONTENT ──────────────────────────────────────────────────────── -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshTransactions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/transactionContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:clipToPadding="false"
+                    android:padding="12dp" />
+
+                <!-- Empty / error state — shown when no data -->
+                <LinearLayout
+                    android:id="@+id/noDataView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@android:drawable/ic_menu_search"
+                        app:tint="#90A4AE" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minWidth="80dp"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:text="No Transactions"
+                        android:textColor="@color/medium_gray"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Try changing filter or date range"
+                        android:textColor="@color/medium_gray"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

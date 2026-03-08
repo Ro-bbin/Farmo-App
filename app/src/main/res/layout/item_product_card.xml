@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    item_product_card.xml
-    Place in: res/layout/item_product_card.xml
-
-    ┌───────────────────────────────────────────────────────┐
-    │  ┌──────┐  Organic Red Tomatoes           [✏ edit]   │
-    │  │ IMG  │  [45 kg remaining] [Active ●]   [  >>  ]   │
-    │  └──────┘  Rs. 120 / kg                              │
-    └───────────────────────────────────────────────────────┘
--->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -28,7 +18,7 @@
         android:gravity="center_vertical"
         android:padding="10dp">
 
-        <!-- ── 1. Product image box ──────────────────────────────────────── -->
+        <!-- 1. Product image box -->
         <LinearLayout
             android:layout_width="72dp"
             android:layout_height="72dp"
@@ -44,7 +34,7 @@
                 app:tint="#66BB6A" />
         </LinearLayout>
 
-        <!-- ── 2. Info column ────────────────────────────────────────────── -->
+        <!-- 2. Info column -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -52,7 +42,6 @@
             android:layout_marginStart="10dp"
             android:orientation="vertical">
 
-            <!-- Product name -->
             <TextView
                 android:id="@+id/tvProductName"
                 android:layout_width="wrap_content"
@@ -62,7 +51,6 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- Badge row: stock + status -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +59,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp">
 
-                <!-- Stock remaining pill -->
                 <TextView
                     android:id="@+id/tvStock"
                     android:layout_width="wrap_content"
@@ -86,7 +73,6 @@
                     android:paddingBottom="3dp"
                     android:background="@drawable/bg_stock_pill" />
 
-                <!-- Status badge (Active / Off / Out of Stock) -->
                 <TextView
                     android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
@@ -100,13 +86,10 @@
                     android:paddingEnd="10dp"
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp"
-                    android:background="@drawable/bg_status_active"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:background="@drawable/bg_status_active" />
 
             </LinearLayout>
 
-            <!-- Price -->
             <TextView
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
@@ -118,33 +101,33 @@
 
         </LinearLayout>
 
-        <!-- ── 3. Action column: edit + arrow ────────────────────────────── -->
+        <!-- 3. Toggle and Action column -->
         <LinearLayout
-            android:layout_width="32dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
-            <!-- Edit icon -->
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchAvailability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/ivEdit"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:src="@android:drawable/ic_menu_edit"
-                android:clickable="true"
-                android:focusable="true"
                 app:tint="#90A4AE" />
 
-            <!-- Forward arrow -->
             <ImageView
                 android:id="@+id/ivArrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@android:drawable/ic_media_next"
-                android:clickable="true"
-                android:focusable="true"
                 app:tint="#B0BEC5" />
 
         </LinearLayout>

@@ -1,179 +1,243 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="60dp"
-      android:background="@color/topical_forest"
-      android:paddingHorizontal="16dp">
-    <ImageView
-        android:id="@+id/btnBack"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_back_arrow"
-        app:tint="@color/white"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/wallet"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
-  </RelativeLayout>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:id="@+id/walletCard"
-        app:cardBackgroundColor="@color/wallet_card_background"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/Walletbox"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tvWalletLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/npr"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvWalletBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvWalletLabel"
-                android:text="*****"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/ivVisibility"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_visibility" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/tvWalletBalance"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/tvTodaysSalesLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider"
-                android:layout_marginTop="16dp"
-                android:text="Today's Income:"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tvSalesAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="16dp"
-                android:text="***"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/ivRefresh"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_below="@id/divider"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="14dp"
-                android:src="@drawable/ic_refresh" />
-
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
-
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:columnCount="2"
-        android:alignmentMode="alignMargins"
-        android:columnOrderPreserved="false">
-
-        <Button
-            android:text="@string/load"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_margin="6dp"
-            android:backgroundTint="@color/topical_forest"/>
-        <Button
-            android:text="@string/withdraw"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_margin="6dp"
-            android:backgroundTint="@color/topical_forest"/>
-
-        <Button
-            android:text="@string/pay_farmer"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_margin="6dp"
-            android:backgroundTint="@color/topical_forest"/>
-        <Button
-            android:text="@string/order_payment"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_margin="6dp"
-            android:backgroundTint="@color/topical_forest"/>
-    </GridLayout>
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:paddingBottom="8dp">
+        android:layout_height="60dp"
+        android:background="@color/topical_forest"
+        android:paddingHorizontal="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recent_transactions"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"/>
-
-        <TextView
-            android:id="@+id/tvSeeAll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/see_all"
-            android:textStyle="bold"
-            android:layout_alignParentEnd="true"
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:padding="8dp"/>
+            android:src="@drawable/ic_back_arrow"
+            app:tint="@color/white"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Wallet"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/transactionList"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshWallet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/tvWalletLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Available Balance"
+                            android:textColor="#757575"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvWalletBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvWalletLabel"
+                            android:layout_marginTop="4dp"
+                            android:text="Rs. 0.00"
+                            android:textColor="#1F1F1F"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/ivVisibility"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignTop="@id/tvWalletBalance"
+                            android:layout_alignBottom="@id/tvWalletBalance"
+                            android:src="@drawable/ic_visibility"
+                            app:tint="@color/topical_forest"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutIncomeExpense"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvWalletBalance"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
+
+                            <LinearLayout
+                                android:id="@+id/layoutTodayIncome"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Today's Income"
+                                    android:textColor="#757575"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/tvTodayIncome"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rs. 0.00"
+                                    android:textColor="#4CAF50"
+                                    android:textStyle="bold"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layoutTodayExpense"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Today's Expense"
+                                    android:textColor="#757575"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/tvTodayExpense"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rs. 0.00"
+                                    android:textColor="#F44336"
+                                    android:textStyle="bold"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Quick Actions Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginBottom="16dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddMoney"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="Add Money"
+                        android:textSize="11sp"
+                        android:textColor="@color/topical_forest"
+                        app:strokeColor="@color/topical_forest"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnWithdraw"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="Withdraw"
+                        android:textSize="11sp"
+                        android:textColor="@color/topical_forest"
+                        app:strokeColor="@color/topical_forest"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPayOrder"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:text="Pay Order"
+                        android:textSize="11sp"
+                        android:textColor="@color/topical_forest"
+                        app:strokeColor="@color/topical_forest"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recent Transactions"
+                        android:textColor="#1F1F1F"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:id="@+id/tvSeeMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:text="See More >"
+                        android:textColor="@color/topical_forest"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:padding="4dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground" />
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTransactions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </LinearLayout>

@@ -25,6 +25,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.farmo.R;
 import com.farmo.activities.authActivities.LoginActivity;
+import com.farmo.activities.commonActivities.BazarActivity;
+import com.farmo.activities.commonActivities.OrdersActivity;
 import com.farmo.activities.commonActivities.ProfileActivity;
 import com.farmo.activities.commonActivities.SettingsActivity;
 import com.farmo.network.Dashboard.DashboardService;
@@ -44,16 +46,17 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
 
     private static final String TAG = "ConsumerDashboard";
 
-    private TextView tvGreeting, tvWalletBalance, tvSalesAmount, tvViewAllCategories;
-    private ImageView ivVisibility, btnNotification;
+    private TextView tvGreeting, tvWalletBalance, tvSalesAmount, tvViewAllCategories, tvTodaysSalesLabel, tvRatingValue;
+    private ImageView ivVisibility;
     private TextView btnProfile;
     private LinearLayout layoutCategoriesHorizontal;
     private GridLayout layoutCategoriesExpanded;
 
     private boolean isBalanceVisible = true;
     private String walletBalance = "0.00";
-    private String todayExpenses = "0.00";
+    private String todayExpense = "0.00";
     private String fullName = "User";
+    private String rating = "None";
 
     private SessionManager sessionManager;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -79,6 +82,12 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
         setupListeners();
         setupSwipeRefresh();
         fetchDashboardData();
+        
+        // Ensure Home is selected in bottom navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        }
     }
 
     @Override
@@ -89,6 +98,12 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
         } else if (!walletBalance.equals("0.00")) {
             // Only re-fetch if data was already loaded once (not on cold start)
             fetchDashboardData();
+        }
+        
+        // Ensure Home is selected when returning to dashboard
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         }
     }
 
@@ -190,14 +205,19 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
                             DashboardService.DashboardResponse data = response.body();
 
                             walletBalance = data.getWallet_amt() != null ? data.getWallet_amt() : "0.00";
-                            todayExpenses = data.getTodayIncome() != null ? data.getTodayIncome() : "0.00";
+                            todayExpense = data.getTodayExpense() != null ? data.getTodayExpense() : "0.00";
                             fullName = data.getUsername() != null ? data.getUsername() : "User";
+                            rating = data.getRating() != null ? data.getRating() : "None";
 
                             runOnUiThread(() -> {
                                 updateGreeting(fullName);
+                                tvRatingValue.setText(rating);
                                 if (isBalanceVisible) {
                                     tvWalletBalance.setText(String.format("NRs. %s", walletBalance));
-                                    tvSalesAmount.setText(String.format("NRs. %s", todayExpenses));
+                                    tvSalesAmount.setText(String.format("NRs. %s", todayExpense));
+                                } else {
+                                    tvWalletBalance.setText("*****");
+                                    tvSalesAmount.setText("*****");
                                 }
                             });
 
@@ -249,14 +269,17 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
                             RefreshWallet.refreshWalletResponse data = response.body();
 
                             String balance = data.getBalance() != null ? data.getBalance() : "0.00";
-                            String todayAmt = data.getTodaysIncome() != null ? data.getTodaysIncome() : "0.00";
+                            String todayAmt = data.getTodayExpense() != null ? data.getTodayExpense() : "0.00";
 
                             walletBalance = balance;
-                            todayExpenses = todayAmt;
+                            todayExpense = todayAmt;
 
                             if (isBalanceVisible) {
                                 tvWalletBalance.setText(String.format("NRs. %s", balance));
                                 tvSalesAmount.setText(String.format("NRs. %s", todayAmt));
+                            } else {
+                                tvWalletBalance.setText("*****");
+                                tvSalesAmount.setText("*****");
                             }
 
                             Toast.makeText(ConsumerDashboardActivity.this,
@@ -301,7 +324,7 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
                 : (timeOfDay < 16) ? "Good Afternoon"
                 : (timeOfDay < 21) ? "Good Evening"
                 : "Good Night";
-        tvGreeting.setText(greeting + ", " + name);
+        tvGreeting.setText(greeting + ",\n" + name);
     }
 
     // ─── Init Views ──────────────────────────────────────────────────────────
@@ -311,10 +334,15 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
         tvSalesAmount = findViewById(R.id.tvSalesAmount);
         tvViewAllCategories = findViewById(R.id.tvViewAllCategories);
         ivVisibility = findViewById(R.id.ivVisibility);
-        btnNotification = findViewById(R.id.btnNotification);
         btnProfile = findViewById(R.id.btnProfile);
         layoutCategoriesHorizontal = findViewById(R.id.layoutCategoriesHorizontal);
         layoutCategoriesExpanded = findViewById(R.id.layoutCategoriesExpanded);
+        tvTodaysSalesLabel = findViewById(R.id.tvTodaysSalesLabel);
+        tvRatingValue = findViewById(R.id.tvRatingValue);
+
+        if (tvTodaysSalesLabel != null) {
+            tvTodaysSalesLabel.setText("Today's Expense:");
+        }
 
         if (tvWalletBalance == null || tvSalesAmount == null) {
             Log.e(TAG, "Critical wallet views not found — check XML IDs");
@@ -332,7 +360,7 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
                     ivVisibility.setImageResource(R.drawable.ic_visibility_off);
                 } else {
                     tvWalletBalance.setText(String.format("NRs. %s", walletBalance));
-                    tvSalesAmount.setText(String.format("NRs. %s", todayExpenses));
+                    tvSalesAmount.setText(String.format("NRs. %s", todayExpense));
                     ivVisibility.setImageResource(R.drawable.ic_visibility);
                 }
                 isBalanceVisible = !isBalanceVisible;
@@ -371,17 +399,31 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
             ivRefresh.setOnClickListener(v -> refreshWalletUI());
         }
 
-        // Bottom Navigation listener for "More"
+        // Add Money & Withdraw
+        findViewById(R.id.btnAddMoney).setOnClickListener(v -> 
+                Toast.makeText(this, "Add Money feature coming soon", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.btnWithdrawMoney).setOnClickListener(v -> 
+                Toast.makeText(this, "Withdraw feature coming soon", Toast.LENGTH_SHORT).show());
+
+        // Bottom Navigation listener
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         if (bottomNavigationView != null) {
             bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
                 int id = item.getItemId();
-                if (id == R.id.navigation_more) {
+                if (id == R.id.navigation_home) {
+                    fetchDashboardData();
+                    return true;
+                } else if (id == R.id.navigation_bazar) {
+                    startActivity(new Intent(this, BazarActivity.class));
+                    return true;
+                } else if (id == R.id.navigation_orders) {
+                    startActivity(new Intent(this, OrdersActivity.class));
+                    return true;
+                } else if (id == R.id.navigation_more) {
                     Intent intent = new Intent(ConsumerDashboardActivity.this, SettingsActivity.class);
                     startActivity(intent);
                     return true;
                 }
-                // Handle other navigation items if needed
                 return false;
             });
         }
@@ -399,10 +441,6 @@ public class ConsumerDashboardActivity extends AppCompatActivity {
                         if (textChild instanceof TextView) {
                             Toast.makeText(ConsumerDashboardActivity.this,
                                     "Catagory clicked", Toast.LENGTH_SHORT).show();
-//                            String category = ((TextView) textChild).getText().toString();
-//                            Intent intent = new Intent(ConsumerDashboardActivity.this, CategoryProductsActivity.class);
-//                            intent.putExtra("CATEGORY_NAME", category);
-//                            startActivity(intent);
                         }
                     }
                 });

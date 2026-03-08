@@ -10,6 +10,7 @@ public class SessionManager {
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_AUTH_TOKEN = "auth_token";
     private static final String KEY_REFRESH_TOKEN = "refresh_token";
+    private static final String KEY_PROFILE_PIC_NAME = "profile_pic_name";
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -20,8 +21,7 @@ public class SessionManager {
     }
 
     /**
-     * Saves the session. We no longer need the 'keepLogin' boolean
-     * because we assume persistence on every successful login.
+     * Saves the session.
      */
     public void saveSession(String userId, String userType, String token,
                             String refreshToken, boolean isLoggedIn) {
@@ -33,10 +33,6 @@ public class SessionManager {
         editor.apply();
     }
 
-    /**
-     * Returns true if there is an active session.
-     * This triggers the 'performTokenLogin' in your LoginActivity.
-     */
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
@@ -57,9 +53,26 @@ public class SessionManager {
         return pref.getString(KEY_REFRESH_TOKEN, "");
     }
 
+    public void setProfilePicName(String name) {
+        saveValue(KEY_PROFILE_PIC_NAME, name);
+    }
+
+    public String getProfilePicName() {
+        return getValue(KEY_PROFILE_PIC_NAME, "");
+    }
+
+    // Generic helpers for product images etc.
+    public void saveValue(String key, String value) {
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public String getValue(String key, String defaultValue) {
+        return pref.getString(key, defaultValue);
+    }
+
     /**
-     * Clears all data. Call this when 'loginWithToken' fails
-     * or when the user clicks 'Logout'.
+     * Clears all data.
      */
     public void clearSession() {
         editor.clear();

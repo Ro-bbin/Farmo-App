@@ -86,6 +86,6 @@ public class RegisterRequest {
         this.facebook = facebook;
         this.whatsapp = whatsapp;
         this.about = about;
-        this.createdBy = createdBy;
+        this.createdBy = "Itself";
     }
 }

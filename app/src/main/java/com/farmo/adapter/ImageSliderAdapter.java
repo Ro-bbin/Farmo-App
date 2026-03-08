@@ -1,5 +1,5 @@
 package com.farmo.adapter;
-import android.graphics.Color;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -7,12 +7,18 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.farmo.R;
+
+import java.io.File;
 import java.util.List;
 
 public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.ViewHolder> {
-    private List<String> images;
+    private List<File> imageFiles;
 
-    public ImageSliderAdapter(List<String> images) { this.images = images; }
+    public ImageSliderAdapter(List<File> imageFiles) {
+        this.imageFiles = imageFiles;
+    }
 
     @NonNull
     @Override
@@ -27,16 +33,27 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Replacing with default placeholder image as requested
-        holder.imageView.setImageResource(android.R.drawable.ic_menu_gallery);
-        holder.imageView.setBackgroundColor(Color.LTGRAY);
+        File file = imageFiles.get(position);
+        if (file != null && file.exists()) {
+            Glide.with(holder.imageView.getContext())
+                    .load(file)
+                    .placeholder(R.drawable.vegetables)
+                    .into(holder.imageView);
+        } else {
+            holder.imageView.setImageResource(R.drawable.vegetables);
+        }
     }
 
     @Override
-    public int getItemCount() { return images.size(); }
+    public int getItemCount() {
+        return imageFiles.size();
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        ViewHolder(View itemView) { super(itemView); imageView = (ImageView) itemView; }
+        ViewHolder(View itemView) {
+            super(itemView);
+            imageView = (ImageView) itemView;
+        }
     }
 }

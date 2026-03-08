@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Product Details"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#00473B"
+            android:layout_marginBottom="16dp"
+            android:gravity="center" />
+
+        <!-- Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Name"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <EditText
+            android:id="@+id/etEditProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:inputType="text"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border" />
+
+        <!-- Product Type -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Type"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteEditProductType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="e.g. Vegetable"
+            android:inputType="text"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border" />
+
+        <!-- Keywords Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keywords"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteEditKeywordSearch"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Search/Add keyword"
+                android:padding="12dp"
+                android:background="@drawable/edittext_border" />
+            <ImageButton
+                android:id="@+id/btnEditAddKeyword"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:src="@android:drawable/ic_input_add"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Add Keyword" />
+        </LinearLayout>
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupEditKeywords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Is Organic -->
+        <CheckBox
+            android:id="@+id/cbIsOrganic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Is Organic?"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Quantity Section (Moved before Cost Per Unit) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantity Management"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#F5F5F5"
+            android:padding="8dp"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Available Stock:"
+                android:textColor="#424242" />
+            <TextView
+                android:id="@+id/tvCurrentQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#00473B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Restock (+):"
+                android:textStyle="bold"
+                android:textColor="#424242" />
+            <EditText
+                android:id="@+id/etAddQty"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:hint="0"
+                android:inputType="number"
+                android:gravity="center"
+                android:padding="12dp"
+                android:background="@drawable/edittext_border" />
+        </LinearLayout>
+
+        <!-- Cost Per Unit (With Rs. label) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cost Per Unit"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs."
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+            <EditText
+                android:id="@+id/etEditPrice"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Price"
+                android:inputType="numberDecimal"
+                android:padding="12dp"
+                android:background="@drawable/edittext_border" />
+        </LinearLayout>
+
+        <!-- Discount Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Discount Type"
+                    android:textStyle="bold"
+                    android:textColor="#424242"
+                    android:layout_marginBottom="4dp" />
+                <Spinner
+                    android:id="@+id/spDiscountType"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/edittext_border" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Discount Value"
+                    android:textStyle="bold"
+                    android:textColor="#424242"
+                    android:layout_marginBottom="4dp" />
+                <EditText
+                    android:id="@+id/etEditDiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="0.0"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_border" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Delivery Option (Changed to Spinner) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delivery Option"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <Spinner
+            android:id="@+id/spEditDeliveryOption"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/edittext_border" />
+
+        <!-- Expiry Date -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expiry Date"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <TextView
+            android:id="@+id/tvEditExpiryDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select Date"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="12dp"
+            android:drawableEnd="@android:drawable/ic_menu_my_calendar" />
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textStyle="bold"
+            android:textColor="#424242"
+            android:layout_marginBottom="4dp" />
+        <EditText
+            android:id="@+id/etEditDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:layout_marginBottom="20dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border" />
+
+        <Button
+            android:id="@+id/btnUpdateProduct"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Update Product"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/btn_green_gradient" />
+
+    </LinearLayout>
+</ScrollView>

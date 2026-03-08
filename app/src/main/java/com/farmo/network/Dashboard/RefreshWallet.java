@@ -7,11 +7,14 @@ public class RefreshWallet {
         @SerializedName("balance")
         private String balance;
 
-        @SerializedName("todays_income")
+        @SerializedName("today_income")
         private String todaysIncome;
 
         @SerializedName("error")
         private String error;
+
+        @SerializedName("today_expense")
+        private String todayExpense;;
 
         // Getters
         public String getBalance() {
@@ -22,8 +25,13 @@ public class RefreshWallet {
             return todaysIncome;
         }
 
-        public String getError() {
-            return error;
+        public String getTodayExpense() {
+            return todayExpense;
         }
+
+            public String getError () {
+                return error;
+            }
+
     }
 }

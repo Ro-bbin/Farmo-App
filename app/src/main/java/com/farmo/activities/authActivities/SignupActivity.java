@@ -2,19 +2,25 @@ package com.farmo.activities.authActivities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.farmo.R;
+import com.farmo.network.ApiService;
 import com.farmo.network.MessageResponse;
+import com.farmo.network.auth.CheckUserIDService;
 import com.farmo.network.auth.RegisterRequest;
 import com.farmo.network.RetrofitClient;
 import com.google.android.material.textfield.TextInputEditText;
@@ -46,6 +52,9 @@ public class SignupActivity extends AppCompatActivity {
     private JSONObject locationsJson;
     private ProgressDialog progressDialog;
 
+    private TextView tvUserIdAvailability;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +83,9 @@ public class SignupActivity extends AppCompatActivity {
         spinnerMunicipality = findViewById(R.id.spinnerMunicipality);
         Button btnRegister = findViewById(R.id.btnRegister);
         Button btnCancel = findViewById(R.id.btnCancel);
+        tvUserIdAvailability = findViewById(R.id.tvUserIdAvailability);
+
+        setupUserIdChangeListener();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Registering...");
@@ -84,6 +96,52 @@ public class SignupActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(v -> performRegistration());
 
         setupLocationSpinners();
+    }
+
+    private void setupUserIdChangeListener() {
+        etUserId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String userId = s.toString().trim();
+                if (userId.isEmpty()) {
+                    tvUserIdAvailability.setText("");
+                } else {
+                    checkUserIdAvailability(userId);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void checkUserIdAvailability(String userid) {
+        ApiService apiService = RetrofitClient.getApiService(this);
+        CheckUserIDService.Request request = new CheckUserIDService.Request(userid);
+        apiService.checkUserID(request).enqueue(new Callback<CheckUserIDService.Response>() {
+            @Override
+            public void onResponse(@NonNull Call<CheckUserIDService.Response> call, @NonNull Response<CheckUserIDService.Response> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int status = response.body().getStatus();
+                    if (status == 0) {
+                        tvUserIdAvailability.setText("Available");
+                        tvUserIdAvailability.setTextColor(Color.GREEN);
+                    } else {
+                        tvUserIdAvailability.setText("Not Available");
+                        tvUserIdAvailability.setTextColor(Color.RED);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CheckUserIDService.Response> call, @NonNull Throwable t) {
+                tvUserIdAvailability.setText("");
+                tvUserIdAvailability.setTextColor(Color.GRAY);
+            }
+        });
     }
 
     private void performRegistration() {

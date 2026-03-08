@@ -9,10 +9,11 @@ public class MessageResponse {
     @SerializedName("error")
     private String error;
 
-    @SerializedName("missing")
-    private String missing;
+    public String getMessage() {
+        return message;
+    }
 
-    public String getMessage() { return message; }
-    public String getError() { return error; }
-    public String getMissing() { return missing; }
+    public String getError() {
+        return error;
+    }
 }

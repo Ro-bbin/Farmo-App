@@ -37,209 +37,184 @@
         android:layout_marginTop="20dp"
         android:visibility="gone"/>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Profile Header Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:cardCornerRadius="50dp">
-                        <ImageView
-                            android:id="@+id/ivProfileImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"/>
-<!--                            android:src="@drawable/pp_placeholder" -->
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/tvProfileName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Loading..."
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/black"/>
-
-                    <TextView
-                        android:id="@+id/tvProfileUserType"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="User Type"
-                        android:textColor="@color/topical_forest"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/tvJoinDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Member since: ---"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Contact Information Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Contact Information"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/topical_forest"
-                        android:layout_marginBottom="12dp"/>
-
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemEmail" />
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemPhone" />
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemPhone2" />
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemWhatsapp" />
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemFacebook" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Personal Information Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Personal Information"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/topical_forest"
-                        android:layout_marginBottom="12dp"/>
-
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemSex" />
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemDob" />
-                    <include layout="@layout/profile_info_item" android:id="@+id/itemAddress" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- About Me Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="About Me"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/topical_forest"/>
-                    <TextView
-                        android:id="@+id/tvAbout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="No info provided."
-                        android:textColor="@android:color/darker_gray"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <Button
-                android:id="@+id/btn_verification"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/greenButton"
-                android:text="Verification"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_margin="10dp"/>
+                <!-- Profile Header Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:cardCornerRadius="50dp">
+                            <ImageView
+                                android:id="@+id/ivProfileImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"/>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/tvProfileName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Loading..."
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"/>
+
+                        <TextView
+                            android:id="@+id/tvProfileUserType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="User Type"
+                            android:textColor="@color/topical_forest"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tvJoinDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Member since: ---"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Contact Information Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Contact Information"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/topical_forest"
+                            android:layout_marginBottom="12dp"/>
+
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemEmail" />
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemPhone" />
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemPhone2" />
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemWhatsapp" />
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemFacebook" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Personal Information Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Personal Information"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/topical_forest"
+                            android:layout_marginBottom="12dp"/>
+
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemSex" />
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemDob" />
+                        <include layout="@layout/profile_info_item" android:id="@+id/itemAddress" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- About Me Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="About Me"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/topical_forest"/>
+                        <TextView
+                            android:id="@+id/tvAbout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="No info provided."
+                            android:textColor="@android:color/darker_gray"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+
+
+                <!-- Logout Button -->
                 <Button
-                    android:id="@+id/btn_editprofile"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btnLogout"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:backgroundTint="@color/blueButton"
-                    android:text="Edit Profile"
-                    android:textColor="@color/white"
+                    android:layout_marginTop="8dp"
+                    android:text="Logout"
+                    android:textColor="#D32F2F"
                     android:textStyle="bold"
-                    android:layout_margin="10dp"/>
+                    app:backgroundTint="@color/white"
+                    app:strokeColor="#D32F2F"
+                    app:strokeWidth="2dp"
+                    app:cornerRadius="12dp"/>
+
 
             </LinearLayout>
-            <!-- Logout Button -->
-            <Button
-                android:id="@+id/btnLogout"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:text="Logout"
-                android:textColor="#D32F2F"
-                android:textStyle="bold"
-                app:backgroundTint="@color/white"
-                app:strokeColor="#D32F2F"
-                app:strokeWidth="2dp"
-                app:cornerRadius="12dp"/>
-
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -57,16 +57,36 @@
             android:textSize="18sp"
             android:background="@drawable/qty_ctrl_bg" />
 
-        <TextView
-            android:id="@+id/tvQuantity"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#1F1F1F"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
+
+            <EditText
+                android:id="@+id/etQuantity"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#1F1F1F"
+                android:inputType="numberDecimal"
+                android:gravity="center"
+                android:background="@drawable/edittext_border"
+                android:padding="8dp"/>
+
+            <TextView
+                android:id="@+id/tvQuantityUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" unit"
+                android:textSize="14sp"
+                android:textColor="#757575"
+                android:layout_marginStart="4dp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnIncrease"
@@ -124,7 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="8dp">
 
         <EditText
             android:id="@+id/etWard"
@@ -150,6 +170,51 @@
             android:textSize="14sp" />
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/etOrderMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Message (Optional)"
+        android:inputType="textMultiLine"
+        android:minLines="2"
+        android:gravity="top"
+        android:padding="12dp"
+        android:background="@drawable/edittext_border"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Method"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#757575"
+        android:layout_marginBottom="8dp" />
+
+    <RadioGroup
+        android:id="@+id/rgPaymentMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/rbWallet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Wallet"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/rbCOD"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cash on Delivery" />
+    </RadioGroup>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -174,7 +239,7 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:hint="4"
+            android:text="5"
             android:inputType="number"
             android:textColor="#1F1F1F"
             android:textStyle="bold"
@@ -182,6 +247,34 @@
             android:gravity="center"
             android:padding="8dp"
             android:background="@drawable/edittext_border" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutDiscount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvDiscountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Discount"
+            android:textColor="#2E7D32"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tvDiscountAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="-Rs. 0.00"
+            android:textColor="#2E7D32"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
