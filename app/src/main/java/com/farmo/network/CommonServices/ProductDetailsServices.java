@@ -86,6 +86,9 @@ public class ProductDetailsServices {
         @SerializedName("no_of_media")
         private int noOfMedia;
 
+        @SerializedName("delivery_option")
+        private String deliveryOption;
+
         // Getters
         public String getPId() { return pId; }
         public String getUserId() { return userId; }
@@ -109,5 +112,6 @@ public class ProductDetailsServices {
         public String getFarmerName() { return farmerName; }
         public String getFarmerLocation() { return farmerLocation; }
         public int getNoOfMedia() { return noOfMedia; }
+        public String getDeliveryOption() { return deliveryOption; }
     }
 }

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F4F7"
-    android:orientation="vertical">
+    android:background="#F2F4F7">
 
-    <!-- Header Container -->
     <LinearLayout
+        android:id="@+id/header_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -16,7 +15,6 @@
         android:orientation="vertical"
         android:paddingBottom="14dp">
 
-        <!-- Top Bar: Back Button + Title -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -28,7 +26,10 @@
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_back_arrow"
-                app:tint="@color/white"/>
+                app:tint="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:id="@+id/tv_screen_title"
@@ -40,17 +41,18 @@
                 android:textStyle="bold"/>
         </RelativeLayout>
 
-        <!-- Tab Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_marginTop="14dp"
+            android:layout_marginHorizontal="12dp"
             android:background="@drawable/bg_tab_container"
             android:orientation="horizontal"
             android:padding="4dp">
 
             <Button
                 android:id="@+id/btn_tab_connections"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -63,6 +65,7 @@
 
             <Button
                 android:id="@+id/btn_tab_pending"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -77,6 +80,7 @@
 
             <Button
                 android:id="@+id/btn_tab_sent"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -89,27 +93,58 @@
 
         </LinearLayout>
 
-        <!-- User Count Display -->
         <TextView
             android:id="@+id/tv_user_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
             android:text="0 of 0 users"
             android:textColor="#6B7280"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_connections"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="4dp" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_container">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_connections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingTop="8dp"
+                android:nestedScrollingEnabled="false" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_load_more"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:text="Load More"
+                android:textColor="@color/topical_forest"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

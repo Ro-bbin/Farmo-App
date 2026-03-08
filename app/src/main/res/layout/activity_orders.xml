@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_topical_forest"
+    android:background="#F5F5F5"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -18,25 +18,143 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_back_arrow"
             app:tint="@color/white"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Orders"
+            android:text="Order Management"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="Orders Page Content Goes Here"
-        android:textColor="@color/topical_forest"
-        android:textSize="18sp"/>
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:background="@color/white"
+        android:elevation="2dp">
+
+        <LinearLayout
+            android:id="@+id/layoutFilterType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type: "
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+            <Spinner
+                android:id="@+id/spinnerOrderType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: "
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+            <Spinner
+                android:id="@+id/spinnerOrderStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvDateFrom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="From: yyyy-mm-dd"
+                android:background="@android:drawable/edit_text"
+                android:padding="8dp"
+                android:layout_marginEnd="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tvDateTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="To: yyyy-mm-dd"
+                android:background="@android:drawable/edit_text"
+                android:padding="8dp"
+                android:layout_marginStart="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:textSize="12sp"/>
+
+            <ImageView
+                android:id="@+id/btnClearDate"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="4dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:contentDescription="Clear Date"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTotalOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Total Orders: 0"
+        android:textStyle="italic"
+        android:textSize="14sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOrders"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="4dp"
+        android:clipToPadding="false"/>
+
+    <Button
+        android:id="@+id/btnLoadMore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="See More"
+        android:visibility="gone"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/topical_forest"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_margin="16dp"/>
 
 </LinearLayout>

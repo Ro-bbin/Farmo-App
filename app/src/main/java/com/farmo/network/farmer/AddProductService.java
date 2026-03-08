@@ -34,18 +34,72 @@ public class AddProductService {
         public List<String> keywords;
 
         public AddProductRequest() {}
+
+        public AddProductRequest(
+                String product_name,
+                String product_type,
+                String unit,
+                double quantity,
+                boolean is_organic,
+                double cost_per_unit,
+                String produced_date,
+                String expiry_date,
+                String description,
+                String discount_type,
+                int discount,
+                String delivery_options,
+                List<String> keywords
+        ) {
+            this.product_name     = product_name;
+            this.product_type     = product_type;
+            this.unit             = unit;
+            this.quantity         = quantity;
+            this.is_organic       = is_organic;
+            this.cost_per_unit    = cost_per_unit;
+            this.produced_date    = produced_date;
+            this.expiry_date      = expiry_date;
+            this.description      = description;
+            this.discount_type    = discount_type;
+            this.discount         = discount;
+            this.delivery_options = delivery_options;
+            this.keywords         = keywords;
+        }
     }
 
     public static class AddProductResponse {
+        @SerializedName("message")
         public String message;
+        @SerializedName("product_id")
         public String product_id;
+        @SerializedName("note")
         public String note;
+        @SerializedName("upload_instructions")
         public UploadInstructions upload_instructions;
 
+        public AddProductResponse() {}
+
+        public AddProductResponse(String message, String product_id, String note, UploadInstructions upload_instructions) {
+            this.message = message;
+            this.product_id = product_id;
+            this.note = note;
+            this.upload_instructions = upload_instructions;
+        }
+
         public static class UploadInstructions {
+            @SerializedName("subject")
             public String subject;
+            @SerializedName("product_id")
             public String product_id;
+            @SerializedName("file_purpose")
             public String file_purpose;
+
+            public UploadInstructions() {}
+
+            public UploadInstructions(String subject, String product_id, String file_purpose) {
+                this.subject = subject;
+                this.product_id = product_id;
+                this.file_purpose = file_purpose;
+            }
         }
     }
 

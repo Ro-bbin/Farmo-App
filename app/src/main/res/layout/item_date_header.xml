@@ -1,65 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#546E7A"
-    android:padding="16dp">
+    android:paddingTop="16dp"
+    android:paddingBottom="8dp">
 
-    <!-- Day number (big) -->
     <TextView
         android:id="@+id/tvDayNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="23"
-        android:textColor="#FFFFFF"
-        android:textSize="38sp"
-        android:textStyle="bold" />
+        android:text="04"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/topical_forest" />
 
-    <!-- Month + Year -->
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvMonthYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="12dp"
         android:layout_toEndOf="@id/tvDayNumber"
-        android:orientation="vertical">
+        android:layout_marginStart="8dp"
+        android:layout_alignTop="@id/tvDayNumber"
+        android:text="Mar 2026"
+        android:textSize="14sp"
+        android:textColor="#757575" />
 
-        <TextView
-            android:id="@+id/tvMonthYear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Feb 2026"
-            android:textColor="#E0F2F1"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <!-- Closing Balance (right-aligned) -->
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvClosingBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:gravity="end"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Closing Balance"
-            android:textColor="#B0BEC5"
-            android:textSize="11sp" />
-
-        <TextView
-            android:id="@+id/tvClosingBalance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rs. 0.00"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:text="Rs. 0.00"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F" />
 
 </RelativeLayout>

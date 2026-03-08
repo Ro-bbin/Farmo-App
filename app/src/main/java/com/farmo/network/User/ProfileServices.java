@@ -47,6 +47,9 @@ public class ProfileServices {
         @SerializedName("profile_picture_otp")
         private String profilePictureOtp;
 
+        @SerializedName("profile_picture")
+        private String profilePicture;
+
         // Getters
         public String getUserId() {
             return userId;
@@ -104,6 +107,10 @@ public class ProfileServices {
             return profilePictureOtp;
         }
 
+        public String getProfilePicture() {
+            return profilePicture;
+        }
+
         // Setters (optional, if needed)
         public void setUserId(String userId) {
             this.userId = userId;
@@ -159,6 +166,10 @@ public class ProfileServices {
 
         public void setProfilePictureOtp(String profilePictureOtp) {
             this.profilePictureOtp = profilePictureOtp;
+        }
+
+        public void setProfilePicture(String profilePicture) {
+            this.profilePicture = profilePicture;
         }
     }
 

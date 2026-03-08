@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <LinearLayout
+        android:id="@+id/layoutLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginEnd="64dp"
+        android:background="@drawable/chat_bubble_left"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvMessageLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message left"
+            android:textColor="#1F1F1F"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvDateLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="2dp"
+            android:text="12:00 PM"
+            android:textColor="#757575"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/chat_bubble_right"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvMessageRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message right"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvDateRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="2dp"
+            android:text="12:00 PM"
+            android:textColor="#E0E0E0"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+</LinearLayout>

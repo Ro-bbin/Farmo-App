@@ -88,7 +88,8 @@
                     android:text="-20%"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
             </FrameLayout>
 
             <!-- ══ Main Card: Name · Price · Rating · Qty ══ -->
@@ -307,19 +308,7 @@
                     android:columnCount="2"
                     android:rowCount="2">
 
-                    <LinearLayout style="@style/PillStyle"
-                        android:layout_columnWeight="1" android:layout_width="0dp" android:layout_margin="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="📦" android:textSize="20sp" android:layout_marginEnd="10dp"/>
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="Min Order" android:textSize="11sp" android:textColor="#9EADA4"/>
-                            <TextView android:id="@+id/tvMinOrder" android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:text="0.5 kg"
-                                android:textSize="13sp" android:textStyle="bold" android:textColor="#111D15"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
+                    <!-- Type -->
                     <LinearLayout style="@style/PillStyle"
                         android:layout_columnWeight="1" android:layout_width="0dp" android:layout_margin="4dp">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -333,6 +322,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Harvested -->
                     <LinearLayout style="@style/PillStyle"
                         android:layout_columnWeight="1" android:layout_width="0dp" android:layout_margin="4dp">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -346,7 +336,23 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Expiry Date -->
                     <LinearLayout style="@style/PillStyle"
+                        android:layout_columnWeight="1" android:layout_width="0dp" android:layout_margin="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="⏳" android:textSize="20sp" android:layout_marginEnd="10dp"/>
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Expires" android:textSize="11sp" android:textColor="#9EADA4"/>
+                            <TextView android:id="@+id/tvExpiryDate" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:text="N/A"
+                                android:textSize="13sp" android:textStyle="bold" android:textColor="#111D15"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Origin (Only if not my product) -->
+                    <LinearLayout android:id="@+id/layoutOrigin"
+                        style="@style/PillStyle"
                         android:layout_columnWeight="1" android:layout_width="0dp" android:layout_margin="4dp">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="📍" android:textSize="20sp" android:layout_marginEnd="10dp"/>
@@ -363,6 +369,7 @@
 
             <!-- ══ Farmer Card ══ -->
             <LinearLayout
+                android:id="@+id/layoutFarmerSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -373,6 +380,7 @@
                 android:paddingBottom="18dp">
 
                 <TextView
+                    android:id="@+id/tvSoldBy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sold by"
@@ -420,8 +428,9 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- ══ Delivery and Returns ══ -->
+            <!-- ══ Delivery (Returns removed) ══ -->
             <LinearLayout
+                android:id="@+id/layoutDeliveryReturns"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -432,51 +441,24 @@
                 android:paddingBottom="18dp">
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Delivery &amp; Returns" android:textSize="15sp"
+                    android:text="Delivery" android:textSize="15sp"
                     android:textStyle="bold" android:textColor="#111D15" android:layout_marginBottom="10dp"/>
 
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="11dp">
                     <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:text="🚚" android:textSize="20sp"/>
                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="Free Delivery" android:textSize="14sp" android:textStyle="bold" android:textColor="#111D15"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="Guaranteed within 3–5 business days" android:textSize="12sp" android:textColor="#7A8C80"/>
-                    </LinearLayout>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="FREE" android:textSize="13sp" android:textStyle="bold" android:textColor="#1B5E3B"/>
-                </LinearLayout>
-
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEF2EE"/>
-
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="11dp">
-                    <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:text="📦" android:textSize="20sp"/>
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="Standard Delivery" android:textSize="14sp" android:textStyle="bold" android:textColor="#111D15"/>
-                        <TextView android:id="@+id/tvDeliveryStandardDetail" android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" android:text="To your location"
-                            android:textSize="12sp" android:textColor="#7A8C80"/>
-                    </LinearLayout>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Rs. 83" android:textSize="13sp" android:textStyle="bold" android:textColor="#1B5E3B"/>
-                </LinearLayout>
-
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEF2EE"/>
-
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="11dp">
-                    <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:text="↩️" android:textSize="20sp"/>
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="14 Days Free Returns" android:textSize="14sp" android:textStyle="bold" android:textColor="#111D15"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="Not satisfied with quality? Easy return"
-                            android:textSize="12sp" android:textColor="#7A8C80"/>
+                        <TextView
+                            android:id="@+id/tvDeliveryStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delivery Available"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#111D15"/>
                     </LinearLayout>
                 </LinearLayout>
+
             </LinearLayout>
 
             <!-- ══ Description ══ -->
@@ -521,7 +503,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- ══ Floating Top Bar: Back · Share · Wishlist ══ -->
+    <!-- ══ Floating Top Bar: Back only ══ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -543,33 +525,12 @@
 
         <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/btnShare"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_share"
-            android:background="@drawable/circle_white_btn"
-            android:padding="9dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:elevation="6dp"
-            android:layout_marginEnd="10dp"
-            app:tint="#1B2A23"/>
-
-        <ImageView
-            android:id="@+id/btnWishlist"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@android:drawable/btn_star_big_off"
-            android:background="@drawable/circle_white_btn"
-            android:padding="7dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:elevation="6dp"/>
+        <!-- Share and Wishlist removed -->
     </LinearLayout>
 
     <!-- ══ Bottom Action Bar: Review It | Buy Now ══ -->
     <LinearLayout
+        android:id="@+id/layoutBottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -579,7 +540,8 @@
         android:paddingBottom="22dp"
         android:layout_gravity="bottom"
         android:elevation="16dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/btnReviewIt"
@@ -593,7 +555,8 @@
             android:background="@drawable/btn_green_gradient"
             android:layout_marginEnd="12dp"
             android:elevation="0dp"
-            android:stateListAnimator="@null"/>
+            android:stateListAnimator="@null"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnReqestOrder"
@@ -606,7 +569,21 @@
             android:textStyle="bold"
             android:background="@drawable/btn_yellowish_gradient"
             android:elevation="0dp"
-            android:stateListAnimator="@null"/>
+            android:stateListAnimator="@null"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnEditProduct"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Edit Product"
+            android:textSize="15sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/btn_green_gradient"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

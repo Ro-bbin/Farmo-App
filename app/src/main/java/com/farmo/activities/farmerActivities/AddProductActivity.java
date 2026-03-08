@@ -1,6 +1,7 @@
 package com.farmo.activities.farmerActivities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
@@ -25,9 +27,10 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -37,8 +40,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.farmo.R;
-import com.farmo.network.CommonServices.UploadService;
 import com.farmo.network.RetrofitClient;
+import com.farmo.network.CommonServices.UploadService;
 import com.farmo.network.farmer.AddProductService;
 import com.farmo.utils.SessionManager;
 import com.google.android.material.button.MaterialButton;
@@ -59,7 +62,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,20 +70,14 @@ import retrofit2.Response;
 public class AddProductActivity extends AppCompatActivity {
 
     private static final String TAG = "AddProductActivity";
+    private static final String NOTIF_CHANNEL_ID = "product_upload_channel";
+    private static final int    NOTIF_ID_UPLOAD    = 1001;
+    private static final int    MAX_IMAGES         = 5;
+    private static final long   MAX_IMAGE_BYTES    = 20 * 1024 * 1024;
+    private static final int    DEBOUNCE_DELAY_MS  = 500;
 
-    private static final String NOTIF_CHANNEL_ID  = "upload_channel";
-    private static final int    NOTIF_ID_UPLOAD   = 1001;
-    private static final long   DEBOUNCE_DELAY_MS = 300;
-
-    private static final int  MAX_IMAGES      = 5;
-    private static final long MAX_IMAGE_BYTES = 20L * 1024 * 1024;
-
-    private static final String[] UNIT_LABELS = {
-            "Kilogram", "Gram", "Litre", "Piece", "Dozen", "Quintal", "Ton"
-    };
-    private static final String[] UNIT_VALUES = {
-            "kg", "g", "l", "piece", "dozen", "quintal", "ton"
-    };
+    private static final String[] UNIT_LABELS = {"Kilogram (kg)", "Gram (g)", "Liter (L)", "Milliliter (ml)", "Piece (pcs)", "Dozen", "Bundle"};
+    private static final String[] UNIT_VALUES = {"kilogram", "gram", "liter", "milliliter", "piece", "dozen", "bundle"};
 
     private AutoCompleteTextView autoCompleteProductType;
     private AutoCompleteTextView autoCompleteKeywordSearch;
@@ -119,7 +115,7 @@ public class AddProductActivity extends AppCompatActivity {
     private String         userId;
     private SessionManager sessionManager;
 
-    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private ActivityResultLauncher<PickVisualMediaRequest> productImagePicker;
 
     private boolean isSelectingFromDropdown = false;
 
@@ -373,27 +369,25 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
     private void registerImagePicker() {
-        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() != RESULT_OK || result.getData() == null) return;
-            Intent data = result.getData();
-            int spotsLeft = MAX_IMAGES - selectedImages.size();
-            int added = 0;
-            if (data.getClipData() != null) {
-                int count = data.getClipData().getItemCount();
-                for (int i = 0; i < count && added < spotsLeft; i++) { if (validateAndAddImage(data.getClipData().getItemAt(i).getUri())) added++; }
-            } else if (data.getData() != null) { if (validateAndAddImage(data.getData())) added++; }
-            if (added > 0) mediaPreviewAdapter.notifyDataSetChanged();
-            updateImageButtonState();
+        productImagePicker = registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(MAX_IMAGES), uris -> {
+            if (uris != null && !uris.isEmpty()) {
+                int spotsLeft = MAX_IMAGES - selectedImages.size();
+                int added = 0;
+                for (int i = 0; i < uris.size() && added < spotsLeft; i++) {
+                    if (validateAndAddImage(uris.get(i))) added++;
+                }
+                if (added > 0) mediaPreviewAdapter.notifyDataSetChanged();
+                updateImageButtonState();
+            }
         });
     }
 
     private void setupMediaPicker() {
         btnUploadMedia.setOnClickListener(v -> {
             if (selectedImages.size() >= MAX_IMAGES) { Toast.makeText(this, "Max " + MAX_IMAGES + " images.", Toast.LENGTH_SHORT).show(); return; }
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            imagePickerLauncher.launch(intent);
+            productImagePicker.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
     }
 
@@ -428,7 +422,7 @@ public class AddProductActivity extends AppCompatActivity {
         btnAddProduct.setOnClickListener(v -> {
             if (!validateForm()) return;
             btnAddProduct.setEnabled(false);
-            btnAddProduct.setText("Adding…");
+            btnAddProduct.setText("Adding\u2026");
             addProductToServer();
         });
     }
@@ -441,6 +435,32 @@ public class AddProductActivity extends AppCompatActivity {
         if (isEmpty(etPricePerUnit)) { etPricePerUnit.setError("Required"); return false; }
         if (isEmpty(etProducedDate)) { etProducedDate.setError("Required"); return false; }
         if (isEmpty(etExpiryDate))   { etExpiryDate.setError("Required");   return false; }
+
+        String discountStr = etDiscount.getText() != null ? etDiscount.getText().toString().trim() : "";
+        if (!discountStr.isEmpty()) {
+            try {
+                int discount = Integer.parseInt(discountStr);
+                String discountType = spinnerDiscountType.getText().toString().trim();
+                double cost = Double.parseDouble(etPricePerUnit.getText().toString().trim());
+
+                if (discountType.equalsIgnoreCase("Percentage")) {
+                    if (discount > 90) {
+                        Toast.makeText(this, "You should decrease discount to get some money.", Toast.LENGTH_LONG).show();
+                        etDiscount.setError("Too high");
+                        return false;
+                    }
+                } else if (discountType.equalsIgnoreCase("Flat")) {
+                    if (discount > (0.9 * cost)) {
+                        Toast.makeText(this, "You should decrease discount to get some money.", Toast.LENGTH_LONG).show();
+                        etDiscount.setError("Too high");
+                        return false;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                // Ignore
+            }
+        }
+
         if (!cbAvailable.isChecked() && !cbNotAvailable.isChecked()) { Toast.makeText(this, "Select delivery option.", Toast.LENGTH_SHORT).show(); return false; }
         return true;
     }
@@ -469,7 +489,7 @@ public class AddProductActivity extends AppCompatActivity {
                 if (!response.isSuccessful() || response.body() == null) { Toast.makeText(AddProductActivity.this, parseError(response), Toast.LENGTH_LONG).show(); return; }
                 resolvedProductId = response.body().product_id;
                 Toast.makeText(AddProductActivity.this, "Product created!", Toast.LENGTH_SHORT).show();
-                if (!selectedImages.isEmpty()) startImageUploadInBackground(); else finish();
+                if (!selectedImages.isEmpty()) startImageBatchUpload(); else finish();
             }
             @Override public void onFailure(@NonNull Call<AddProductService.AddProductResponse> call, @NonNull Throwable t) {
                 btnAddProduct.setEnabled(true); btnAddProduct.setText("Add Product");
@@ -479,53 +499,85 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
     private AddProductService.AddProductRequest buildAddProductRequest() {
-        AddProductService.AddProductRequest req = new AddProductService.AddProductRequest();
-        req.product_name     = etProductName.getText().toString().trim();
-        req.product_type     = getProductTypeKey(autoCompleteProductType.getText().toString().trim());
-        req.unit             = resolveUnitValue(spinnerUnit.getText().toString().trim());
-        req.quantity         = Double.parseDouble(etQuantity.getText().toString().trim());
-        req.is_organic       = rgOrganic.getCheckedRadioButtonId() == R.id.rbOrganic;
-        req.cost_per_unit    = Double.parseDouble(etPricePerUnit.getText().toString().trim());
-        req.produced_date    = etProducedDate.getText().toString().trim();
-        req.expiry_date      = etExpiryDate.getText().toString().trim();
-        req.description      = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
-        req.discount_type    = spinnerDiscountType.getText().toString().trim().toLowerCase();
-        req.delivery_options = cbAvailable.isChecked() ? "Available" : "Not Available";
-        req.keywords         = new ArrayList<>(selectedKeywords);
-        String d = etDiscount.getText() != null ? etDiscount.getText().toString().trim() : "";
-        req.discount = d.isEmpty() ? 0 : Integer.parseInt(d);
-        return req;
+        String name         = etProductName.getText().toString().trim();
+        String type         = getProductTypeKey(autoCompleteProductType.getText().toString().trim());
+        String unit         = resolveUnitValue(spinnerUnit.getText().toString().trim());
+        double quantity     = Double.parseDouble(etQuantity.getText().toString().trim());
+        boolean isOrganic   = rgOrganic.getCheckedRadioButtonId() == R.id.rbOrganic;
+        double cost         = Double.parseDouble(etPricePerUnit.getText().toString().trim());
+        String producedDate = etProducedDate.getText().toString().trim();
+        String expiryDate   = etExpiryDate.getText().toString().trim();
+        String description  = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
+        String discountType = spinnerDiscountType.getText().toString().trim();
+        String delivery     = cbAvailable.isChecked() ? "Available" : "Not Available";
+        List<String> kw     = new ArrayList<>(selectedKeywords);
+        String dStr         = etDiscount.getText() != null ? etDiscount.getText().toString().trim() : "";
+        int discount        = dStr.isEmpty() ? 0 : Integer.parseInt(dStr);
+
+        return new AddProductService.AddProductRequest(
+                name, type, unit, quantity, isOrganic, cost,
+                producedDate, expiryDate, description,
+                discountType, discount, delivery, kw
+        );
     }
 
-    private void startImageUploadInBackground() {
-        List<Uri> images = new ArrayList<>(selectedImages);
-        int total = images.size();
+    private void startImageBatchUpload() {
+        List<File> tempFiles = new ArrayList<>();
         Context appContext = getApplicationContext();
-        UploadService.ChunkedFileUploader uploader = new UploadService.ChunkedFileUploader(RetrofitClient.getApiService(appContext), userId);
-        finish();
-        AtomicInteger uploadedCount = new AtomicInteger(0);
-        for (int i = 0; i < images.size(); i++) {
-            final int seq = i + 1; Uri uri = images.get(i);
-            File tempFile = copyUriToTempFile(appContext, uri, "img_" + seq);
-            if (tempFile != null) {
-                uploader.uploadFile(tempFile, "PRODUCT_MEDIA", resolvedProductId, seq, new UploadService.ChunkedFileUploader.UploadCallback() {
-                    @Override public void onSuccess(UploadService.UploadResponse r) { tempFile.delete(); if (uploadedCount.incrementAndGet() == total) showUploadCompleteNotification(appContext, total, total); }
-                    @Override public void onError(String e) { tempFile.delete(); if (uploadedCount.incrementAndGet() == total) showUploadCompleteNotification(appContext, uploadedCount.get(), total); }
-                });
-            }
+        
+        for (int i = 0; i < selectedImages.size(); i++) {
+            File f = copyUriToTempFile(appContext, selectedImages.get(i), "img_batch_" + (i + 1));
+            if (f != null) tempFiles.add(f);
         }
+
+        if (tempFiles.isEmpty()) { finish(); return; }
+
+        new UploadService.ProductImageBatchUploader(
+            appContext,
+            tempFiles,
+            resolvedProductId,
+            new UploadService.ImageBatchUploadCallback() {
+                @Override public void onBatchSuccess() {
+                    for (File f : tempFiles) f.delete();
+                    showUploadCompleteNotification(appContext, tempFiles.size(), tempFiles.size());
+                }
+                @Override public void onBatchProgress(int completed, int total) {
+                    Log.d(TAG, "Batch Progress: " + completed + " / " + total + " uploaded");
+                }
+                @Override public void onBatchFailure(int failedIndex, String error) {
+                    for (File f : tempFiles) f.delete();
+                    Log.e(TAG, "Image " + (failedIndex + 1) + " failed: " + error);
+                    Toast.makeText(appContext, "Image " + (failedIndex + 1) + " failed: " + error, Toast.LENGTH_LONG).show();
+                }
+            }
+        ).start();
+
+        finish();
     }
 
-    private File copyUriToTempFile(Context context, Uri uri, String name) {
+    @Nullable
+    private File copyUriToTempFile(Context context, Uri uri, String namePrefix) {
         try {
-            File dir = new File(context.getCacheDir(), "upload_tmp"); if (!dir.exists()) dir.mkdirs();
-            File file = new File(dir, System.currentTimeMillis() + "_" + name);
-            try (InputStream in = context.getContentResolver().openInputStream(uri); FileOutputStream out = new FileOutputStream(file)) {
-                if (in == null) return null; byte[] buf = new byte[8192]; int len;
+            String mimeType = context.getContentResolver().getType(uri);
+            String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+            if (ext == null) ext = "jpg";
+
+            File dir = new File(context.getCacheDir(), "upload_tmp"); 
+            if (!dir.exists()) dir.mkdirs();
+            
+            File file = new File(dir, namePrefix + "_" + System.currentTimeMillis() + "." + ext);
+            try (InputStream in = context.getContentResolver().openInputStream(uri); 
+                 FileOutputStream out = new FileOutputStream(file)) {
+                if (in == null) return null; 
+                byte[] buf = new byte[8192]; 
+                int len;
                 while ((len = in.read(buf)) != -1) out.write(buf, 0, len);
             }
             return file;
-        } catch (IOException e) { return null; }
+        } catch (IOException e) { 
+            Log.e(TAG, "copyUriToTempFile failed", e);
+            return null; 
+        }
     }
 
     private void createNotificationChannel() {

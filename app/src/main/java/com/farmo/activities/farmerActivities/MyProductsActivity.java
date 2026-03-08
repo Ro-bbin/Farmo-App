@@ -1,304 +1,375 @@
 package com.farmo.activities.farmerActivities;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.farmo.R;
-import com.farmo.network.CommonServices.MyProductService;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import com.farmo.activities.commonActivities.ProductDetailActivity;
+import com.farmo.network.ApiService;
+import com.farmo.network.RetrofitClient;
+import com.farmo.network.farmer.MyProductListService;
+import com.farmo.network.farmer.UpdateProduct;
+import com.farmo.utils.SessionManager;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyProductsActivity extends AppCompatActivity {
 
-    private static final String TAG       = "MyProductsActivity";
-    private static final String JSON_FILE = "products.json";
+    private static final String TAG = "MyProductsActivity";
+    private static final String DATE_FORMAT = "dd-MM-yyyy";
 
-    // ── UI ────────────────────────────────────────────────────────────────────
     private LinearLayout productContainer;
     private LinearLayout noDataView;
-    private TextView     tabAllProducts;
-    private TextView     tabVegetables;
-    private TextView     tabGrains;
+    private EditText searchEditText;
+    private View btnFilter;
+    private TextView tvProductCount;
 
+    private SessionManager sessionManager;
+    private ApiService apiService;
 
-    // ── DATA ──────────────────────────────────────────────────────────────────
-    private final List<MyProductService> allProducts = new ArrayList<>();
+    private List<MyProductListService.Response.Product> productList = new ArrayList<>();
+    
+    // Request parameters
+    private String currentFilter = "all";
+    private int currentPage = 1;
+    private String dateFrom = "";
+    private String dateTo = "";
+    private String searchQuery = "";
+    
+    private int totalPages = 1;
+    private boolean isLoading = false;
 
-    // =========================================================================
-    //  LIFECYCLE
-    // =========================================================================
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_products);
 
+        sessionManager = new SessionManager(this);
+        apiService = RetrofitClient.getApiService(this);
+
         initViews();
-        setupTopBar();
-        setupFab();
-        loadFromJson();
+        setupSearch();
+        setupFilter();
+        
+        fetchProducts(false);
     }
 
-    // =========================================================================
-    //  INIT
-    // =========================================================================
     private void initViews() {
         productContainer = findViewById(R.id.productContainer);
-        noDataView       = findViewById(R.id.noDataView);
+        noDataView = findViewById(R.id.noDataView);
+        searchEditText = findViewById(R.id.dashboard_search);
+        btnFilter = findViewById(R.id.btnFilter);
+        tvProductCount = findViewById(R.id.tvProductCount);
 
-
-        findViewById(R.id.fabAddProduct).setOnClickListener(v ->{
-            Intent intent = new Intent(MyProductsActivity.this, AddProductActivity.class);
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        findViewById(R.id.fabAddProduct).setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddProductActivity.class);
             startActivity(intent);
         });
-
     }
 
-    private void setupTopBar() {
-        View btnBack = findViewById(R.id.btnBack);
-        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
-    }
+    private void setupSearch() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-
-
-    private void setupFab() {
-        FloatingActionButton fab = findViewById(R.id.fabAddProduct);
-        if (fab != null) fab.setOnClickListener(v ->
-                Toast.makeText(this, "Add Product — coming soon", Toast.LENGTH_SHORT).show());
-    }
-
-    private void selectTab(TextView selected, String category) {
-        for (TextView t : new TextView[]{tabAllProducts, tabVegetables, tabGrains}) {
-            if (t == null) continue;
-            if (t == selected) {
-                GradientDrawable bg = new GradientDrawable();
-                bg.setColor(Color.parseColor("#C8E6C9"));
-                bg.setCornerRadius(16f);
-                t.setBackground(bg);
-                t.setTextColor(Color.parseColor("#00473B"));
-                t.setTypeface(null, Typeface.BOLD);
-            } else {
-                t.setBackgroundColor(Color.TRANSPARENT);
-                t.setTextColor(Color.parseColor("#546E7A"));
-                t.setTypeface(null, Typeface.NORMAL);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchQuery = s.toString().trim();
+                currentPage = 1;
+                fetchProducts(false);
             }
-        }
-        applyFilter(category);
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
-    // =========================================================================
-    //  LOAD FROM JSON
-    // =========================================================================
-    private void loadFromJson() {
-        showLoading(true);
-
-        try {
-            String[] list = getAssets().list("");
-            Log.d(TAG, "=== ASSETS ===");
-            for (String f : list) Log.d(TAG, "  [" + f + "]");
-            Log.d(TAG, "==============");
-        } catch (Exception e) {
-            Log.e(TAG, "Cannot list assets: " + e.getMessage());
-        }
-
-        try {
-            InputStream    is = getAssets().open(JSON_FILE);
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(is, StandardCharsets.UTF_8));
-            StringBuilder  sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) sb.append(line).append('\n');
-            br.close();
-            is.close();
-
-            String json = sb.toString().trim();
-            if (json.isEmpty()) { onDataError("products.json is empty"); return; }
-
-            Log.d(TAG, "Read OK — length=" + json.length());
-            onDataLoaded(json);
-
-        } catch (Exception e) {
-            Log.e(TAG, "Load failed: " + e.getMessage());
-            onDataError("Cannot open " + JSON_FILE + "\n" + e.getMessage());
-        }
+    private void setupFilter() {
+        btnFilter.setOnClickListener(v -> showFilterDialog());
     }
 
-    // =========================================================================
-    //  SHARED PIPELINE
-    // =========================================================================
-    private void onDataLoaded(String json) {
-        showLoading(false);
-        allProducts.clear();
-        allProducts.addAll(parseProducts(json));
+    private void showFilterDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_filter);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        if (allProducts.isEmpty()) {
-            Log.w(TAG, "0 products parsed");
-            showNoData();
-        } else {
-            Log.d(TAG, "Loaded " + allProducts.size() + " products");
-            if (tabAllProducts != null) selectTab(tabAllProducts, "All Products");
-            else applyFilter("All Products");
+        RadioGroup rgFilter = dialog.findViewById(R.id.rgFilter);
+        TextView tvDateFrom = dialog.findViewById(R.id.tvDateFrom);
+        TextView tvDateTo = dialog.findViewById(R.id.tvDateTo);
+        Button btnApply = dialog.findViewById(R.id.btnApplyFilter);
+
+        // Set current values
+        switch (currentFilter) {
+            case "available": rgFilter.check(R.id.rbAvailable); break;
+            case "not-available": rgFilter.check(R.id.rbNotAvailable); break;
+            case "expired": rgFilter.check(R.id.rbExpired); break;
+            case "deleted": rgFilter.check(R.id.rbDeleted); break;
+            default: rgFilter.check(R.id.rbAll); break;
         }
-    }
+        
+        if (!dateFrom.isEmpty()) tvDateFrom.setText(dateFrom);
+        if (!dateTo.isEmpty()) tvDateTo.setText(dateTo);
 
-    private void onDataError(String msg) {
-        showLoading(false);
-        Log.e(TAG, msg);
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-        showNoData();
-    }
+        tvDateFrom.setOnClickListener(v -> showDatePicker(tvDateFrom));
+        tvDateTo.setOnClickListener(v -> showDatePicker(tvDateTo));
 
-    // =========================================================================
-    //  PARSE JSON → List<Product>
-    // =========================================================================
-    private List<MyProductService> parseProducts(String json) {
-        List<MyProductService> out = new ArrayList<>();
-        try {
-            JSONArray arr = new JSONArray(json);
-            Log.d(TAG, "JSON count: " + arr.length());
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject o = arr.getJSONObject(i);
-                MyProductService p    = new MyProductService();
-                p.id         = o.optString("id",        String.valueOf(i));
-                p.name       = o.optString("name",      "Unnamed");
-                p.category   = o.optString("category",  "Other");
-                p.status     = o.optString("status",    "inactive");
-                p.price      = o.optString("price",     "0");
-                p.priceUnit  = o.optString("priceUnit", "kg");
-                p.stock      = o.optString("stock",     "0");
-                p.stockUnit  = o.optString("stockUnit", "kg");
-                p.image      = o.optString("image",     "");
-                p.isActive   = p.status.equalsIgnoreCase("active");
-                Log.d(TAG, "  [" + i + "] " + p.name + " | " + p.category + " | " + p.status);
-                out.add(p);
+        btnApply.setOnClickListener(v -> {
+            int checkedId = rgFilter.getCheckedRadioButtonId();
+            if (checkedId == R.id.rbAvailable) currentFilter = "available";
+            else if (checkedId == R.id.rbNotAvailable) currentFilter = "not-available";
+            else if (checkedId == R.id.rbExpired) currentFilter = "expired";
+            else if (checkedId == R.id.rbDeleted) currentFilter = "deleted";
+            else currentFilter = "all";
+
+            String dFrom = tvDateFrom.getText().toString().trim();
+            String dTo = tvDateTo.getText().toString().trim();
+
+            if (!dFrom.isEmpty() && !dTo.isEmpty()) {
+                if (!validateDateRange(dFrom, dTo)) {
+                    Toast.makeText(this, "Date range cannot exceed 125 days", Toast.LENGTH_LONG).show();
+                    return;
+                }
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Parse error: " + e.getMessage());
-        }
-        return out;
-    }
 
-    // =========================================================================
-    //  FILTER → RENDER (no headers — cards only)
-    // =========================================================================
-    private void applyFilter(String category) {
-        if (productContainer == null) return;
-        productContainer.removeAllViews();
+            dateFrom = dFrom.contains("dd-mm-yyyy") ? "" : dFrom;
+            dateTo = dTo.contains("dd-mm-yyyy") ? "" : dTo;
 
-        boolean hasData = false;
-        for (MyProductService p : allProducts) {
-            boolean match = category.equalsIgnoreCase("All Products")
-                    || p.category.equalsIgnoreCase(category);
-            if (!match) continue;
-            addProductCard(p);
-            hasData = true;
-        }
-
-        if (hasData) {
-            productContainer.setVisibility(View.VISIBLE);
-            if (noDataView != null) noDataView.setVisibility(View.GONE);
-        } else {
-            showNoData();
-        }
-    }
-
-    // =========================================================================
-    //  PRODUCT CARD  →  res/layout/item_product_card.xml
-    //
-    //  ┌──────────────────────────────────────────────────────┐
-    //  │  [IMG]  Organic Red Tomatoes       [✏]    [>>]      │
-    //  │         [45 kg remaining] [Active]                   │
-    //  │         Rs. 120 / kg                                │
-    //  └──────────────────────────────────────────────────────┘
-    // =========================================================================
-    private void addProductCard(MyProductService product) {
-        View v = LayoutInflater.from(this)
-                .inflate(R.layout.item_product_card, productContainer, false);
-
-        ((TextView) v.findViewById(R.id.tvProductName))
-                .setText(product.name);
-        ((TextView) v.findViewById(R.id.tvStock))
-                .setText(product.stock + " " + product.stockUnit + " remaining");
-        ((TextView) v.findViewById(R.id.tvPrice))
-                .setText("Rs. " + product.price + " / " + product.priceUnit);
-
-        TextView tvStatus = v.findViewById(R.id.tvStatus);
-        applyBadgeStyle(tvStatus, product.status);
-
-        // Tap to toggle Active ↔ Off  (Out of Stock is locked)
-        tvStatus.setOnClickListener(badge -> {
-            if (product.status.toLowerCase().contains("out")) {
-                Toast.makeText(this,
-                        product.name + " is Out of Stock — update stock first",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-            product.isActive = !product.isActive;
-            product.status   = product.isActive ? "active" : "inactive";
-            applyBadgeStyle(tvStatus, product.status);
-            Log.d(TAG, "Toggle: " + product.name + " → " + product.status);
+            currentPage = 1;
+            fetchProducts(false);
+            dialog.dismiss();
         });
 
-        v.findViewById(R.id.ivEdit).setOnClickListener(b ->
-                Toast.makeText(this, "Edit: " + product.name, Toast.LENGTH_SHORT).show());
+        dialog.show();
+    }
 
-        v.findViewById(R.id.ivArrow).setOnClickListener(b ->
-                Toast.makeText(this, "View: " + product.name, Toast.LENGTH_SHORT).show());
+    private void showDatePicker(TextView target) {
+        Calendar cal = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            String date = String.format(Locale.US, "%02d-%02d-%04d", dayOfMonth, month + 1, year);
+            target.setText(date);
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private boolean validateDateRange(String start, String end) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        try {
+            Date d1 = sdf.parse(start);
+            Date d2 = sdf.parse(end);
+            if (d1 == null || d2 == null) return true;
+            long diff = d2.getTime() - d1.getTime();
+            long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            return days <= 125 && days >= 0;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private void fetchProducts(boolean isLoadMore) {
+        if (isLoading) return;
+        isLoading = true;
+
+        String token = sessionManager.getAuthToken();
+        String userId = sessionManager.getUserId();
+
+        MyProductListService.Request request = new MyProductListService.Request(
+                currentFilter,
+                currentPage,
+                searchQuery.isEmpty() ? null : searchQuery,
+                dateFrom.isEmpty() ? null : dateFrom,
+                dateTo.isEmpty() ? null : dateTo,
+                null // sortBy
+        );
+
+        apiService.getMyProductList(token, userId, request).enqueue(new Callback<MyProductListService.Response>() {
+            @Override
+            public void onResponse(@NonNull Call<MyProductListService.Response> call, @NonNull Response<MyProductListService.Response> response) {
+                isLoading = false;
+                if (response.isSuccessful() && response.body() != null) {
+                    MyProductListService.Response res = response.body();
+                    totalPages = res.getTotalPages();
+                    currentPage = res.getCurrentPage();
+                    
+                    if (tvProductCount != null) {
+                        tvProductCount.setText("Products " + res.getTotalProducts() + " are in list.");
+                    }
+
+                    if (!isLoadMore) {
+                        productList.clear();
+                        productContainer.removeAllViews();
+                    }
+                    
+                    List<MyProductListService.Response.Product> newProducts = res.getProducts();
+                    if (newProducts != null) {
+                        productList.addAll(newProducts);
+                        for (MyProductListService.Response.Product p : newProducts) {
+                            addProductCard(p);
+                        }
+                    }
+                    
+                    updateUI();
+                    
+                    if (currentPage < totalPages) {
+                        addLoadMoreButton();
+                    }
+                } else {
+                    Toast.makeText(MyProductsActivity.this, "Failed to load products", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MyProductListService.Response> call, @NonNull Throwable t) {
+                isLoading = false;
+                Toast.makeText(MyProductsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateUI() {
+        if (productList.isEmpty()) {
+            productContainer.setVisibility(View.GONE);
+            noDataView.setVisibility(View.VISIBLE);
+        } else {
+            productContainer.setVisibility(View.VISIBLE);
+            noDataView.setVisibility(View.GONE);
+        }
+    }
+
+    private void addProductCard(MyProductListService.Response.Product product) {
+        View v = LayoutInflater.from(this).inflate(R.layout.item_product_card, productContainer, false);
+
+        ((TextView) v.findViewById(R.id.tvProductName)).setText(product.getName());
+        ((TextView) v.findViewById(R.id.tvStock)).setText(product.getQuantityAvailable() + " remaining");
+        ((TextView) v.findViewById(R.id.tvPrice)).setText("Rs. " + product.getCostPerUnit() + " / unit");
+
+        TextView tvStatus = v.findViewById(R.id.tvStatus);
+        applyBadgeStyle(tvStatus, product.getProductStatus());
+
+        SwitchCompat switchAvailability = v.findViewById(R.id.switchAvailability);
+        String status = product.getProductStatus() != null ? product.getProductStatus().toLowerCase() : "";
+
+        if (status.equals("available") || status.equals("not-available")) {
+            switchAvailability.setVisibility(View.VISIBLE);
+            switchAvailability.setChecked(status.equals("available"));
+            switchAvailability.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                String action = isChecked ? "available" : "not-available";
+                toggleProductAvailability(product.getPId(), action);
+            });
+        } else {
+            switchAvailability.setVisibility(View.GONE);
+        }
+
+        // Hide Edit and View buttons as requested in previous turn
+        v.findViewById(R.id.ivEdit).setVisibility(View.GONE);
+        v.findViewById(R.id.ivArrow).setVisibility(View.GONE);
+
+        // Make whole card clickable
+        v.setOnClickListener(b -> {
+            Intent intent = new Intent(MyProductsActivity.this, ProductDetailActivity.class);
+            intent.putExtra("PRODUCT_ID", product.getPId());
+            startActivity(intent);
+        });
 
         productContainer.addView(v);
     }
 
-    // =========================================================================
-    //  STATUS BADGE
-    // =========================================================================
+    private void toggleProductAvailability(String productId, String action) {
+        apiService.toggleAvailability(sessionManager.getAuthToken(), sessionManager.getUserId(), 
+                new UpdateProduct.ToggleAvailabilityRequest(productId, action))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(MyProductsActivity.this, "Status updated to " + action, Toast.LENGTH_SHORT).show();
+                            currentPage = 1;
+                            fetchProducts(false); // Refresh list
+                        } else {
+                            Toast.makeText(MyProductsActivity.this, "Failed to update status", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        Toast.makeText(MyProductsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     private void applyBadgeStyle(TextView badge, String status) {
+        if (status == null) status = "";
         switch (status.toLowerCase()) {
-            case "active":
-                badge.setText("Active");
-                badge.setTextColor(Color.WHITE);
+            case "available":
+                badge.setText("Available");
                 badge.setBackgroundResource(R.drawable.bg_status_active);
                 break;
-            case "out_of_stock":
-            case "out of stock":
-                badge.setText("Out of Stock");
-                badge.setTextColor(Color.WHITE);
+            case "not-available":
+                badge.setText("Not Available");
+                badge.setBackgroundResource(R.drawable.bg_status_inactive);
+                break;
+            case "sold":
+                badge.setText("Sold");
                 badge.setBackgroundResource(R.drawable.bg_status_out_of_stock);
                 break;
             default:
-                badge.setText("Off");
-                badge.setTextColor(Color.WHITE);
+                badge.setText(status);
                 badge.setBackgroundResource(R.drawable.bg_status_inactive);
                 break;
         }
+        badge.setTextColor(Color.WHITE);
     }
 
-    // =========================================================================
-    //  HELPERS
-    // =========================================================================
-    private void showLoading(boolean show) { }
+    private void addLoadMoreButton() {
+        // Remove existing load more if any
+        View oldBtn = productContainer.findViewWithTag("load_more");
+        if (oldBtn != null) productContainer.removeView(oldBtn);
 
-    private void showNoData() {
-        if (productContainer != null) productContainer.setVisibility(View.GONE);
-        if (noDataView != null)       noDataView.setVisibility(View.VISIBLE);
-    }
+        Button btnLoadMore = new Button(this);
+        btnLoadMore.setText("Load More");
+        btnLoadMore.setTag("load_more");
+        btnLoadMore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#00473B")));
+        btnLoadMore.setTextColor(Color.WHITE);
+        
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(40, 20, 40, 40);
+        btnLoadMore.setLayoutParams(params);
 
-    private int dp(int dp) {
-        return Math.round(dp * getResources().getDisplayMetrics().density);
+        btnLoadMore.setOnClickListener(v -> {
+            currentPage++;
+            productContainer.removeView(btnLoadMore);
+            fetchProducts(true);
+        });
+
+        productContainer.addView(btnLoadMore);
     }
 }
